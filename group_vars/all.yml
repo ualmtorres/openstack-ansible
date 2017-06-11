@@ -1,0 +1,13 @@
+
+# IP's
+controller_management_ip: 10.0.0.12
+compute01_management_ip: 10.0.0.14
+
+# Interface names
+management_interface: "ens3"
+provider_interface: "ens4"
+
+# Management network
+management_network: 10.0.0.0
+management_gateway: 10.0.0.1
+dns: 150.214.156.2 8.8.8.8

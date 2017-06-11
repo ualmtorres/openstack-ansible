@@ -1,0 +1,17 @@
+- name: "Actualizar cache de paquetes"
+  apt:
+    update_cache: yes
+
+- name: "Actualizar paquetes"
+  apt:
+    upgrade: dist
+
+- name: "Adding openstack host names to /etc/hosts"
+  blockinfile:
+    name: /etc/hosts
+    block: |
+      # Controller
+      {{controller_management_ip}} controller
+
+      # Compute
+      {{compute01_management_ip}} compute01
