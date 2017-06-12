@@ -15,3 +15,12 @@
 
       # Compute
       {{compute01_management_ip}} compute01
+
+- name: "Instalar pip"
+  apt:
+    name: python-pip
+
+- name: "Actualizar pip"
+  pip:
+    name: pip
+    extra_args: --upgrade
