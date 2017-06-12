@@ -17,3 +17,4 @@
   become: true
   roles:
     - sql_database
+    - rabbitmq

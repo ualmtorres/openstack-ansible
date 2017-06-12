@@ -1,0 +1,9 @@
+- name: Instalar rabbitmq
+  apt:
+    name: rabbitmq-server
+
+- name: Add the openstack user
+  command: 'rabbitmqctl add_user openstack {{ RABBIT_PASS }}'
+
+- name: Configure permissions of the openstack user
+  command: 'rabbitmqctl set_permissions openstack ".*" ".*" ".*"'

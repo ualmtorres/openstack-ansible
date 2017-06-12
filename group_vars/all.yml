@@ -17,3 +17,5 @@ ntp_server: 1.es.pool.ntp.org
 
 # MySQL passwords
 mysql_root_password: asdasd
+
+RABBIT_PASS: asdasd
