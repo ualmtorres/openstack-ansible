@@ -14,3 +14,6 @@ dns: 150.214.156.2 8.8.8.8
 
 # NTP server
 ntp_server: 1.es.pool.ntp.org
+
+# MySQL passwords
+mysql_root_password: asdasd

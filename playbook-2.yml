@@ -12,3 +12,8 @@
   become: true
   roles:
     - openstack_packages
+
+- hosts: controller
+  become: true
+  roles:
+    - sql_database
