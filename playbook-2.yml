@@ -1,0 +1,9 @@
+- hosts: controller
+  become: true
+  roles:
+    - ntp_server
+    
+- hosts: compute
+  become: true
+  roles:
+    - ntp_others
