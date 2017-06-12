@@ -2,8 +2,13 @@
   become: true
   roles:
     - ntp_server
-    
+
 - hosts: compute
   become: true
   roles:
     - ntp_others
+
+- hosts: all
+  become: true
+  roles:
+    - openstack_packages

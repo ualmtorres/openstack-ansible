@@ -1,0 +1,26 @@
+- name: Instalar software-properties-common
+  apt:
+    name: software-properties-common
+    state: latest
+
+- name: Instalar ubuntu-cloud-keyring
+  apt:
+    name: ubuntu-cloud-keyring
+    state: latest
+
+- name: Añadir repositorio OpenStack
+  apt_repository:
+    #repo: cloud-archive:ocata
+    #De dónde han sacado iesgn lo siguiente?
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu xenial-updates/ocata main"
+    state: present
+    update_cache: yes
+
+- name: "Actualizar paquetes"
+  apt:
+    upgrade: dist
+
+- name: Instalar python-openstackclient
+  apt:
+    name: python-openstackclient
+    state: latest
