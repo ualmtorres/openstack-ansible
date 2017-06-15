@@ -19,3 +19,4 @@
     - sql_database
     - rabbitmq
     - memcached
+    - keystone_controller

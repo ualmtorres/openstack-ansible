@@ -16,6 +16,11 @@ dns: 150.214.156.2 8.8.8.8
 ntp_server: 1.es.pool.ntp.org
 
 # MySQL passwords
-mysql_root_password: asdasd
+mysql_root_password: "asdasd"
 
-RABBIT_PASS: asdasd
+RABBIT_PASS: "asdasd"
+keystone_dbpass: "asdasd"
+
+admin_pass: "asdasd"
+
+short_controller_name: "controller"

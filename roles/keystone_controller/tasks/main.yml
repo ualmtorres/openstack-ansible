@@ -1,0 +1,68 @@
+- name: Create keystone database
+  mysql_db:
+    name: keystone
+    state: present
+
+- name: Granting access to keystone database
+  mysql_user: >
+    name=keystone
+    host={{ item }}
+    password={{ keystone_dbpass }}
+    priv=keystone.*:ALL
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Install keystone packages
+  apt:
+    name: keystone
+    state: latest
+
+- name: Setup keystone.conf on controller
+  template: >
+    src=etc/keystone/keystone.conf
+    dest=/etc/keystone/keystone.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Build keystone database
+  command: 'su -s /bin/sh -c "keystone-manage db_sync" keystone'
+
+- name: Initialize Fernet key repositories (1/2)
+  command: 'keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone'
+
+- name: Initialize Fernet key repositories (2/2)
+  command: 'keystone-manage credential_setup --keystone-user keystone --keystone-group keystone'
+
+- name: Bootstrap the Identity service
+  command: 'keystone-manage bootstrap --bootstrap-password {{ admin_pass}} \
+  --bootstrap-admin-url http://controller:35357/v3/ \
+  --bootstrap-internal-url http://controller:5000/v3/ \
+  --bootstrap-public-url http://controller:5000/v3/ \
+  --bootstrap-region-id RegionOne'
+
+- name: Setup apache2.conf on controller
+  template: >
+    src=etc/apache2/apache2.conf
+    dest=/etc/apache2/apache2.conf
+    owner=root
+    group=root
+    mode=0644
+  notify: restart apache
+
+- name: Remove the default SQLite database
+  file:
+    state=absent
+    path='/var/lib/keystone/keystone.db'
+
+- name: Setup openrc for root user on controller
+  template: >
+    src=root/openrc.sh
+    dest=/root/openrc.sh
+    owner=root
+    group=root
+    mode=0600
