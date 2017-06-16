@@ -1,0 +1,22 @@
+- name: Load openrc credentials
+  shell: . /root/admin_openrc.sh
+
+- name: Create /etc/openstack directory
+  file: path=/etc/openstack state=directory
+
+- name: Copy clouds.yaml en controller
+  template: >
+    src=etc/openstack/clouds.yaml
+    dest=/etc/openstack/clouds.yaml
+    owner=root
+    group=root
+    mode=0644
+
+- name: Create project
+  os_project:
+    cloud: lowcost
+    state: present
+    name: service
+    description: Service Project
+#    domain_id: default
+    enabled: True

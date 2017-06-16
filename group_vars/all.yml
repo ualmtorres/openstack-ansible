@@ -24,3 +24,5 @@ keystone_dbpass: "asdasd"
 admin_pass: "asdasd"
 
 short_controller_name: "controller"
+
+admin_token: "012345SECRET99TOKEN012345"

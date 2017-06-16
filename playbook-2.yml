@@ -20,3 +20,4 @@
     - rabbitmq
     - memcached
     - keystone_controller
+    - keystone_setup

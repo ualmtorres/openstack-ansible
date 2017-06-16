@@ -1,0 +1,17 @@
+auth:
+  auth_url: http://controller:35357/v3/
+  username: admin
+  password: admin
+#  domain_id: default
+#  project_name: admin
+#  token: 012345SECRET99TOKEN012345
+  user_domain_name: default
+  project_domain_name: default
+
+clouds:
+  openstack:
+    auth:
+      auth_url: http://controller:35357/v3/
+      username: admin
+      password: admin
+    region_name: RegionOne

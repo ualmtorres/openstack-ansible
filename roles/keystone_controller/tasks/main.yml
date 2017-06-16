@@ -62,7 +62,10 @@
 - name: Setup openrc for root user on controller
   template: >
     src=root/openrc.sh
-    dest=/root/openrc.sh
-    owner=root
-    group=root
+    dest=/home/ubuntu/admin_openrc.sh
+    owner=ubuntu
+    group=ubuntu
     mode=0600
+
+- name: Install the Python os_project module
+  pip: name=shade
