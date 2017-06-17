@@ -59,12 +59,20 @@
     state=absent
     path='/var/lib/keystone/keystone.db'
 
-- name: Setup openrc for root user on controller
+- name: Setup openrc-admin for root user on controller
   template: >
-    src=root/openrc.sh
-    dest=/home/ubuntu/admin_openrc.sh
-    owner=ubuntu
-    group=ubuntu
+    src=root/openrc-admin
+    dest=/root/openrc-admin
+    owner=root
+    group=root
+    mode=0600
+
+- name: Setup openrc-demo for root user on controller
+  template: >
+    src=root/openrc-demo
+    dest=/root/openrc-demo
+    owner=root
+    group=root
     mode=0600
 
 - name: Install the Python os_project module

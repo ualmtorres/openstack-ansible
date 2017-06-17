@@ -1,11 +1,10 @@
 clouds:
   lowcost:
-    profile: lowcost
     auth:
       auth_url: http://controller:35357/v3
       username: admin
-      password: admin
-      project_name: mordred@inaugust.com
-    user_domain_name: Default
-    project_domain_name: Default
-    identity_api_version: 3
+      password: {{ admin_pass }}
+      project_name: admin
+      user_domain_name: Default
+      project_domain_name: Default
+    identity_api_version: "3"

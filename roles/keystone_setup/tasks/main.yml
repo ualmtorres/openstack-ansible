@@ -1,6 +1,3 @@
-- name: Load openrc credentials
-  shell: . /root/admin_openrc.sh
-
 - name: Create /etc/openstack directory
   file: path=/etc/openstack state=directory
 
@@ -12,11 +9,49 @@
     group=root
     mode=0644
 
-- name: Create project
+- name: Create admin project
   os_project:
     cloud: lowcost
     state: present
     name: service
     description: Service Project
-#    domain_id: default
+    domain_id: default
     enabled: True
+
+- name: Create demo project
+  os_project:
+    cloud: lowcost
+    state: present
+    name: demo
+    description: Demo Project
+    domain_id: default
+    enabled: True
+
+- name: Create demo user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=demo
+    password={{demo_pass}}
+    domain=default
+
+- name: Create a role named user
+  os_keystone_role:
+    cloud: lowcost
+    state: present
+    name: user
+
+- name: Grant the user role on the user demo in the project demo
+  os_user_role:
+    cloud: lowcost
+    user: demo
+    role: user
+    project: demo
+
+- name: Setup keystone-paste.ini en controller
+  template: >
+    src=etc/keystone/keystone-paste.ini
+    dest=/etc/keystone/keystone-paste.ini
+    owner=root
+    group=root
+    mode=0644
