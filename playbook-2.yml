@@ -21,3 +21,5 @@
     - memcached
     - keystone_controller
     - keystone_setup
+    - glance_controller
+    

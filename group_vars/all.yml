@@ -20,8 +20,10 @@ mysql_root_password: "asdasd"
 
 RABBIT_PASS: "asdasd"
 keystone_dbpass: "asdasd"
+glance_dbpass: "asdasd"
 
 admin_pass: "asdasd"
 demo_pass: "asdasd"
 
 short_controller_name: "controller"
+region: "RegionOne"

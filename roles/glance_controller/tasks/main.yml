@@ -1,0 +1,91 @@
+- name: Create glance database
+  mysql_db:
+    name: glance
+    state: present
+
+- name: Granting access to glance database
+  mysql_user: >
+    name=glance
+    host={{ item }}
+    password={{ glance_dbpass }}
+    priv=glance.*:ALL
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Create glance user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=glance
+    password={{glance_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user glance in the project service
+  os_user_role:
+    cloud: lowcost
+    user: glance
+    role: admin
+    project: service
+
+- name: Create a service for glance
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: glance
+    service_type: image
+    description: OpenStack Image
+
+- name: Create public service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image public http://{{short_controller_name}}:9292
+
+- name: Create internal service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image internal http://{{short_controller_name}}:9292
+
+- name: Create admin service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image admin http://{{short_controller_name}}:9292
+
+- name: Install glance
+  apt:
+    name: glance
+    state: latest
+
+- name: Setup glance-api.conf on controller
+  template: >
+    src=etc/glance/glance-api.conf
+    dest=/etc/glance/glance-api.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup glance-registry.conf on controller
+  template: >
+    src=etc/glance/glance-registry.conf
+    dest=/etc/glance/glance-registry.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Build glance database
+  command: 'su -s /bin/sh -c "glance-manage db_sync" glance'
+  notify:
+    - restart glance-registry
+    - restart glance-api
+
+- name: Download Cirros image
+  get_url:
+    url: http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
+    dest: /tmp/cirros-0.3.5-x86_64-disk.img
+
+- name: Upload the Cirros image
+  os_image:
+    cloud: lowcost
+    name: cirros
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    filename: /tmp/cirros-0.3.5-x86_64-disk.img
+    is_public: yes
