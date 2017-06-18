@@ -17,6 +17,7 @@ Trabajo en progreso: Actualmente, este playbook instala los componentes de OpenS
 
 * Keystone
 * Glance
+* Nova 
 ---
 
 ## Consideraciones

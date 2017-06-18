@@ -22,10 +22,16 @@ RABBIT_PASS: "asdasd"
 keystone_dbpass: "asdasd"
 glance_dbpass: "asdasd"
 nova_dbpass: "asdasd"
+neutron_dbpass: "asdasd"
 placement_pass: "asdasd"
+
+
+
 
 admin_pass: "asdasd"
 demo_pass: "asdasd"
 
 short_controller_name: "controller"
 region: "RegionOne"
+
+metadata_secret: "asdasd"

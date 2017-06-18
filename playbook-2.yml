@@ -23,3 +23,13 @@
     - keystone_setup
     - glance_controller
     - nova_controller
+
+- hosts: compute
+  become: true
+  roles:
+    - nova_compute
+
+- hosts: controller
+  become: true
+  roles:
+    - nova_host_discovery

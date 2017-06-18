@@ -1,0 +1,2 @@
+- name: Discover new compute hosts
+  command: 'su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova'
