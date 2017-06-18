@@ -21,6 +21,8 @@ mysql_root_password: "asdasd"
 RABBIT_PASS: "asdasd"
 keystone_dbpass: "asdasd"
 glance_dbpass: "asdasd"
+nova_dbpass: "asdasd"
+placement_pass: "asdasd"
 
 admin_pass: "asdasd"
 demo_pass: "asdasd"

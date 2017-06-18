@@ -1,0 +1,152 @@
+- name: Create nova_api, nova y nova_cell0 databases
+  mysql_db:
+    name={{item}}
+    state=present
+  with_items:
+    - nova_api
+    - nova
+    - nova_cell0
+
+- name: Granting access to nova_api database
+  mysql_user: >
+    name=nova
+    host={{ item }}
+    password={{ nova_dbpass }}
+    priv=nova_api.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Granting access to nova database
+  mysql_user: >
+    name=nova
+    host={{ item }}
+    password={{ nova_dbpass }}
+    priv=nova.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Granting access to nova_cell0 database
+  mysql_user: >
+    name=nova
+    host={{ item }}
+    password={{ nova_dbpass }}
+    priv=nova_cell0.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Create nova user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=nova
+    password={{nova_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user nova in the project service
+  os_user_role:
+    cloud: lowcost
+    user: nova
+    role: admin
+    project: service
+
+- name: Create a service for nova
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: nova
+    service_type: compute
+    description: OpenStack Compute
+
+- name: Create compute public service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute public http://{{short_controller_name}}:8774/v2.1
+
+- name: Create compute internal service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute internal http://{{short_controller_name}}:8774/v2.1
+
+- name: Create compute admin service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute admin http://{{short_controller_name}}:8774/v2.1
+
+- name: Create placement user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=placement
+    password={{placement_pass}}
+    domain=default
+
+- name: Grant the admin role on the user placement in the project service
+  os_user_role:
+    cloud: lowcost
+    user: placement
+    role: admin
+    project: service
+
+- name: Create a service for placement
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: placement
+    service_type: placement
+    description: Placement API
+
+- name: Create placement public service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement public http://{{short_controller_name}}:8778
+
+- name: Create placement internal service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement internal http://{{short_controller_name}}:8778
+
+- name: Create placement admin service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement admin http://{{short_controller_name}}:8778
+
+- name: Install nova
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - nova-api
+    - nova-conductor
+    - nova-consoleauth
+    - nova-novncproxy
+    - nova-scheduler
+    - nova-placement-api
+
+- name: Setup nova.conf on controller
+  template: >
+    src=etc/nova/nova.conf
+    dest=/etc/nova/nova.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Build nova database
+  command: 'su -s /bin/sh -c "nova-manage api_db sync" nova'
+
+- name: Register the cell0 database
+  command: 'su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova'
+
+- name: Create the cell1 cell
+  command:  'su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova 109e1d4b-536a-40d0-83c6-5f121b82b650'
+
+- name: Populate the nova database
+  command:  'su -s /bin/sh -c "nova-manage db sync" nova'
+  notify:
+    - restart nova-api
+    - restart nova-consoleauth
+    - restart nova-scheduler
+    - restart nova-conductor
+    - restart nova-novncproxy
