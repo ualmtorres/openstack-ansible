@@ -10,6 +10,15 @@
   * Ubuntu 16.04 LTS
   * Python 2.7.1
 
+---
+**NOTA**
+
+Trabajo en progreso: Actualmente, este playbook instala los componentes de OpenStack siguientes:
+
+* Keystone
+* Glance
+---
+
 ## Consideraciones
 
 * Este proyecto instala OpenStack en un nodo de control (`control`) y un nodo de cómputo (`compute01`).
