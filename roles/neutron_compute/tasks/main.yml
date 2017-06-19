@@ -1,0 +1,23 @@
+- name: Install neutron on compute
+  apt:
+    name: neutron-linuxbridge-agent
+    state: latest
+
+- name: Setup neutron.conf on compute
+  template: >
+    src=etc/neutron/neutron.conf
+    dest=/etc/neutron/neutron.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup linuxbridge_agent.ini on compute
+  template: >
+    src=etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart nova-compute
+    - restart neutron-linuxbridge-agent

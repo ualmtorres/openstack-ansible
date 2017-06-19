@@ -34,3 +34,8 @@
   roles:
     - nova_host_discovery
     - neutron_controller
+
+- hosts: compute
+  become: true
+  roles:
+    - neutron_compute

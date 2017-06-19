@@ -5,6 +5,7 @@ compute01_management_ip: 10.0.0.14
 
 # Consider overlay_interface_ip_address as controller_management_ip
 overlay_interface_ip_address: 10.0.0.12
+compute_overlay_interface_ip_address: 10.0.0.14
 
 # Interface names
 management_interface: "ens3"
