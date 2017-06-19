@@ -33,3 +33,4 @@
   become: true
   roles:
     - nova_host_discovery
+    - neutron_controller

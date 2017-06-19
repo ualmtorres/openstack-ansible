@@ -1,0 +1,120 @@
+- name: Create neutron database
+  mysql_db:
+    name: neutron
+    state: present
+
+- name: Granting access to neutron database
+  mysql_user: >
+    name=neutron
+    host={{ item }}
+    password={{ neutron_dbpass }}
+    priv=neutron.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Create neutron user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=neutron
+    password={{neutron_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user neutron in the project service
+  os_user_role:
+    cloud: lowcost
+    user: nova
+    role: admin
+    project: service
+
+- name: Create a service for neutron
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: neutron
+    service_type: network
+    description: OpenStack Networking
+
+- name: Create network public service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} network public http://{{short_controller_name}}:9696
+
+- name: Create network internal service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} network internal http://{{short_controller_name}}:9696
+
+- name: Create network admin service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} network admin http://{{short_controller_name}}:9696
+
+- name: Install neutron
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - neutron-server
+    - neutron-plugin-ml2
+    - neutron-linuxbridge-agent
+    - neutron-l3-agent
+    - neutron-dhcp-agent
+    - neutron-metadata-agent
+
+- name: Setup neutron.conf on controller
+  template: >
+    src=etc/neutron/neutron.conf
+    dest=/etc/neutron/neutron.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup ml2_conf.ini on controller
+  template: >
+    src=etc/neutron/plugins/ml2/ml2_conf.ini
+    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup linuxbridge_agent.ini on controller
+  template: >
+    src=etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup l3_agent.ini on controller
+  template: >
+    src=etc/neutron/l3_agent.ini
+    dest=/etc/neutron/l3_agent.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup dhcp_agent.ini on controller
+  template: >
+    src=etc/neutron/dhcp_agent.ini
+    dest=/etc/neutron/dhcp_agent.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup metadata_agent.ini on controller
+  template: >
+    src=etc/neutron/metadata_agent.ini
+    dest=/etc/neutron/metadata_agent.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Populate the neutron database
+  command:  'su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron'
+  notify:
+    - restart nova-api
+    - restart neutron-server
+    - restart neutron-linuxbridge-agent
+    - restart neutron-dhcp-agent
+    - restart neutron-metadata-agent
+    - restart neutron-l3-agent
