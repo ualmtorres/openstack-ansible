@@ -1,4 +1,6 @@
-# Instalación automática de OpenStack con Ansible
+# Instalación automática de OpenStack Ocata con Ansible
+
+![](doc/logoopenstackansible128x128.png)
 
 ## Requisitos
 
@@ -17,7 +19,7 @@ Trabajo en progreso: Actualmente, este playbook instala los componentes de OpenS
 
 * Keystone
 * Glance
-* Nova 
+* Nova
 ---
 
 ## Consideraciones
