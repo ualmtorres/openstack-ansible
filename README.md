@@ -12,7 +12,7 @@ Este playbook de Ansible está creado a partir de la [Guía de instalación ofic
   * Ansible 2.3.1
 * Máquinas remotas
   * Ubuntu 16.04 LTS
-  * Python 2.7.1 (**IMPORTANTE: Ubuntu 16.04 instala Python 3. Por tanto, antes de comenzar a ejecutar el Playbook de esta instalación, debemos instalar Python 2.7 en cada una de las máquinas remotas: (`sudo apt-get update && sudo apt-get install python`)
+  * Python 2.7.1 (**IMPORTANTE: Ubuntu 16.04 instala Python 3. Por tanto, antes de comenzar a ejecutar el Playbook de esta instalación, debemos instalar Python 2.7 en cada una de las máquinas remotas: (`sudo apt-get update && sudo apt-get install python`**)
 
 ---
 **NOTA**
