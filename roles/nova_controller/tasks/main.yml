@@ -150,3 +150,53 @@
     - restart nova-scheduler
     - restart nova-conductor
     - restart nova-novncproxy
+
+- name: "Create tiny flavor"
+  os_nova_flavor:
+    cloud: lowcost
+    state: present
+    name: tiny
+    ram: 512
+    vcpus: 1
+    disk: 1
+    ephemeral: 0
+
+- name: "Create small flavor"
+  os_nova_flavor:
+    cloud: lowcost
+    state: present
+    name: small
+    ram: 2048
+    vcpus: 1
+    disk: 20
+    ephemeral: 0
+
+- name: "Create medium flavor"
+  os_nova_flavor:
+    cloud: lowcost
+    state: present
+    name: medium
+    ram: 4096
+    vcpus: 2
+    disk: 40
+    ephemeral: 0
+
+- name: "Create large flavor"
+  os_nova_flavor:
+    cloud: lowcost
+    state: present
+    name: large
+    ram: 8192
+    vcpus: 4
+    disk: 80
+    ephemeral: 0
+
+- name: "Create xlarge flavor"
+  os_nova_flavor:
+    cloud: lowcost
+    state: present
+    name: xlarge
+    ram: 16384
+    vcpus: 8
+    disk: 160
+    ephemeral: 0
