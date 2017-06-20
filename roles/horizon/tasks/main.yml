@@ -1,0 +1,25 @@
+- name: Install Horizon packages
+  apt:
+    name: openstack-dashboard
+    state: latest
+
+- name: Setup local_settings.py on controller
+  template: >
+    src=etc/openstack-dashboard/local_settings.py
+    dest=/etc/openstack-dashboard/local_settings.py
+    owner=root
+    group=root
+    mode=0644
+
+- name: Change /var/lib/openstack-dashboard/secret-key permissions
+  file:
+    path: /var/lib/openstack-dashboard/secret_key
+    owner: www-data
+    group: www-data
+#    recurse: yes
+
+- name: reload apache
+  service: name=apache2 state=reloaded
+
+- name: restart apache
+  service: name=apache2 state=restarted

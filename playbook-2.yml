@@ -39,3 +39,8 @@
   become: true
   roles:
     - neutron_compute
+
+- hosts: controller
+  become: true
+  roles:
+    - horizon
