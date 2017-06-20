@@ -17,7 +17,7 @@
     - "localhost"
     - "%"
 
-- name: Install keystone packages
+- name: Install keystone packages (Be patient)
   apt:
     name: keystone
     state: latest
@@ -32,7 +32,7 @@
   notify:
     - restart mysql
 
-- name: Build keystone database
+- name: Build keystone database (Be patient)
   command: 'su -s /bin/sh -c "keystone-manage db_sync" keystone'
 
 - name: Initialize Fernet key repositories (1/2)

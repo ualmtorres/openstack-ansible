@@ -1,4 +1,4 @@
-- name: Install nova on compute nodes
+- name: Install nova on compute nodes (Be patient)
   apt:
     name: nova-compute
     state: latest

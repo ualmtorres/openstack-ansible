@@ -1,4 +1,4 @@
-- name: Instalar rabbitmq
+- name: Install rabbitmq
   apt:
     name: rabbitmq-server
 

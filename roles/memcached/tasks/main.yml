@@ -1,11 +1,11 @@
-- name: Instalar Memcached
+- name: Install Memcached (Be patient)
   apt:
     name={{ item }}
   with_items:
     - memcached
     - python-memcache
 
-- name: Configurar memcached.conf
+- name: Setup memcached.conf
   template: >
     src=etc/memcached.conf
     dest=/etc/memcached.conf

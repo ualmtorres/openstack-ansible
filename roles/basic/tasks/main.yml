@@ -1,8 +1,8 @@
-- name: "Actualizar cache de paquetes"
+- name: "Update package cache"
   apt:
     update_cache: yes
 
-- name: "Actualizar paquetes"
+- name: "Update packages (Be patient)"
   apt:
     upgrade: dist
 
@@ -16,11 +16,11 @@
       # Compute
       {{compute01_management_ip}} compute01
 
-- name: "Instalar pip"
+- name: "Install pip"
   apt:
     name: python-pip
 
-- name: "Actualizar pip"
+- name: "Update pip"
   pip:
     name: pip
     extra_args: --upgrade

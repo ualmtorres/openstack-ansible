@@ -113,7 +113,7 @@
 - name: Create placement admin service API endpoint with keystone_service
   shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement admin http://{{short_controller_name}}:8778
 
-- name: Install nova
+- name: Install nova (Be patient)
   apt:
     name={{ item }}
     state=latest
@@ -133,7 +133,7 @@
     group=root
     mode=0644
 
-- name: Build nova database
+- name: Build nova database (Be patient)
   command: 'su -s /bin/sh -c "nova-manage api_db sync" nova'
 
 - name: Register the cell0 database
@@ -142,7 +142,7 @@
 - name: Create the cell1 cell
   command:  'su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova 109e1d4b-536a-40d0-83c6-5f121b82b650'
 
-- name: Populate the nova database
+- name: Populate the nova database (Be patient)
   command:  'su -s /bin/sh -c "nova-manage db sync" nova'
   notify:
     - restart nova-api

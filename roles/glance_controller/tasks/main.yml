@@ -48,7 +48,7 @@
 - name: Create admin service API endpoint with keystone_service
   shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image admin http://{{short_controller_name}}:9292
 
-- name: Install glance
+- name: Install glance (Be patient)
   apt:
     name: glance
     state: latest
@@ -69,7 +69,7 @@
     group=root
     mode=0644
 
-- name: Build glance database
+- name: Build glance database (Be patient)
   command: 'su -s /bin/sh -c "glance-manage db_sync" glance'
   notify:
     - restart glance-registry

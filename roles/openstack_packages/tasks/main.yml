@@ -1,14 +1,14 @@
-- name: Instalar software-properties-common
+- name: Install software-properties-common
   apt:
     name: software-properties-common
     state: latest
 
-- name: Instalar ubuntu-cloud-keyring
+- name: Install ubuntu-cloud-keyring
   apt:
     name: ubuntu-cloud-keyring
     state: latest
 
-- name: Añadir repositorio OpenStack
+- name: Add OpenStack repository
   apt_repository:
     #repo: cloud-archive:ocata
     #De dónde han sacado iesgn lo siguiente?
@@ -16,11 +16,11 @@
     state: present
     update_cache: yes
 
-- name: "Actualizar paquetes"
+- name: "Update packages"
   apt:
     upgrade: dist
 
-- name: Instalar python-openstackclient
+- name: Install python-openstackclient
   apt:
     name: python-openstackclient
     state: latest

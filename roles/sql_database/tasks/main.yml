@@ -1,4 +1,4 @@
-- name: Instalar componentes de base de datos (mariadb-server, python-pymysql)
+- name: Install database components (mariadb-server, python-pymysql)
   apt:
     name={{ item }}
   with_items:
@@ -6,7 +6,7 @@
     - python-pymysql
     - libmysqlclient-dev
 
-- name: Configurar 99-openstack.cnf en controller
+- name: Setup 99-openstack.cnf on controller
   template: >
     src=etc/mysql/mariadb.conf.d/99-openstack.cnf
     dest=/etc/mysql/mariadb.conf.d/99-openstack.cnf
@@ -19,7 +19,7 @@
 - name: Install the Python MySQLB module
   pip: name=MySQL-python
 
-- name: update mysql root password for all root accounts
+- name: Update mysql root password for all root accounts
   mysql_user: >
     name=root
     host=localhost
@@ -41,7 +41,7 @@
   notify:
     - restart mysql
 
-- name: update mysql root password for all root accounts
+- name: Update mysql root password for all root accounts
   mysql_user: >
     name=root
     host={{ item }}
@@ -51,7 +51,7 @@
     - localhost
     - 127.0.0.1
 
-- name: ensure anonymous users are not in the database
+- name: Ensure anonymous users are not in the database
   mysql_user: name='' host={{ item }} state=absent
   with_items:
     - "{{ controller_management_ip }}"

@@ -1,4 +1,4 @@
-- name: Install neutron on compute
+- name: Install neutron on compute (Be patient)
   apt:
     name: neutron-linuxbridge-agent
     state: latest

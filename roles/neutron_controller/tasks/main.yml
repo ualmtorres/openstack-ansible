@@ -49,7 +49,7 @@
 - name: Create network admin service API endpoint with keystone_service
   shell: openstack --os-cloud=lowcost endpoint create --region {{region}} network admin http://{{short_controller_name}}:9696
 
-- name: Install neutron
+- name: Install neutron (Be patient)
   apt:
     name={{ item }}
     state=latest
@@ -109,7 +109,7 @@
     group=root
     mode=0644
 
-- name: Populate the neutron database
+- name: Populate the neutron database (Be patient)
   command:  'su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron'
   notify:
     - restart nova-api

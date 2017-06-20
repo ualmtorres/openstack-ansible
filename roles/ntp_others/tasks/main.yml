@@ -1,9 +1,9 @@
-- name: Instalar chrony
+- name: Install chrony
   apt:
     name: chrony
     state: latest
 
-- name: Configurar chrony en el resto de nodos
+- name: Setup chrony on other nodes
   template: >
     src=etc/chrony/chrony.conf
     dest=/etc/chrony/chrony.conf

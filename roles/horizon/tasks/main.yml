@@ -1,4 +1,4 @@
-- name: Install Horizon packages
+- name: Install Horizon packages (Be patient)
   apt:
     name: openstack-dashboard
     state: latest
