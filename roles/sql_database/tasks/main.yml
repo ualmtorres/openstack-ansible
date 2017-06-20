@@ -13,7 +13,8 @@
     owner=root
     group=root
     mode=0644
-  notify: restart mysql
+  notify:
+    - restart mysql
 
 - name: Install the Python MySQLB module
   pip: name=MySQL-python
@@ -37,7 +38,8 @@
     owner=root
     group=root
     mode=0600
-  notify: restart mysql
+  notify:
+    - restart mysql
 
 - name: update mysql root password for all root accounts
   mysql_user: >
