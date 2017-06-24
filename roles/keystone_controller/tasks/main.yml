@@ -29,8 +29,9 @@
     owner=root
     group=root
     mode=0644
-  notify:
-    - restart mysql
+
+- name: restart mysql
+  service: name=mysql state=restarted
 
 - name: Build keystone database (Be patient)
   command: 'su -s /bin/sh -c "keystone-manage db_sync" keystone'
