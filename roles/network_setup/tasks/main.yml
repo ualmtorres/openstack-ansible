@@ -1,0 +1,21 @@
+- name: Create the network
+  os_network:
+    cloud=lowcost
+    state=present
+    name={{network_name}}
+    shared=True
+    external=True
+    provider_physical_network=provider
+    provider_network_type=flat
+
+#- name: Create a subnet on the network
+#  os_subnet:
+#    cloud=lowcost
+#    state=present
+#    name={{subnet_name}}
+#    network_name={{network_name}}
+#    allocation_pool_start={{allocation_pool_start}}
+#    allocation_pool_end={{allocation_pool_end}}
+#    dns_nameservers={{dns_name_servers}}
+#    gateway_ip={{provider_gateway}}
+#    cidr={{subnet_range}}

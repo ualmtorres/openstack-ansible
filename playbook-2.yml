@@ -32,7 +32,7 @@
 - hosts: controller
   become: true
   roles:
-    - nova_flavor    
+    - nova_flavor
     - nova_host_discovery
     - neutron_controller
 
@@ -45,3 +45,4 @@
   become: true
   roles:
     - horizon
+    - network_setup
