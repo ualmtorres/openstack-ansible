@@ -1,19 +1,25 @@
 
 # IP's
-controller_management_ip: 10.0.0.12
-compute01_management_ip: 10.0.0.14
+controller_management_ip: 192.168.0.18
+compute01_management_ip: 192.168.0.19
+
+controller_provider_ip: 10.0.0.19
+compute01_provider_ip: 10.0.0.20
+
 
 # Consider overlay_interface_ip_address as controller_management_ip
-overlay_interface_ip_address: 10.0.0.12
-compute_overlay_interface_ip_address: 10.0.0.14
+overlay_interface_ip_address: 192.168.0.18
+compute_overlay_interface_ip_address: 192.168.0.19
 
 # Interface names
-management_interface: "ens3"
-provider_interface: "ens4"
+management_interface: "ens4"
+provider_interface: "ens3"
 
 # Management network
-management_network: 10.0.0.0
-management_gateway: 10.0.0.1
+management_network: 192.168.0.0
+management_gateway: 192.168.0.1
+provider_network: 10.0.0.0
+provider_gateway: 10.0.0.1
 dns: 150.214.156.2 8.8.8.8
 
 # NTP server

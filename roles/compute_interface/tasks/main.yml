@@ -8,11 +8,11 @@
         address {{compute01_management_ip}}
         netmask 255.255.255.0
         network {{management_network}}
-        gateway {{management_gateway}}
-        dns-nameservers {{dns}}
+#        gateway {{management_gateway}}
+#        dns-nameservers {{dns}}
 
       # The provider network interface
-      auto {{provider_interface}}
-      iface {{provider_interface}} inet manual
-        up ip link set dev $IFACE up
-        down ip link set dev $IFACE down
+#      auto {{provider_interface}}
+#      iface {{provider_interface}} inet manual
+#        up ip link set dev $IFACE up
+#        down ip link set dev $IFACE down
