@@ -28,7 +28,7 @@
 - name: Grant the admin role on the user neutron in the project service
   os_user_role:
     cloud: lowcost
-    user: nova
+    user: neutron
     role: admin
     project: service
 
