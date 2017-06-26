@@ -37,9 +37,7 @@ nova_dbpass: "asdasd"
 neutron_dbpass: "asdasd"
 placement_pass: "asdasd"
 cinder_dbpass: "asdasd"
-
-
-
+heat_dbpass: "asdasd"
 
 admin_pass: "asdasd"
 demo_pass: "asdasd"

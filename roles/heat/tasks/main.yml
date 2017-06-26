@@ -1,0 +1,118 @@
+- name: Create heat database
+  mysql_db:
+    name: heat
+    state: present
+
+- name: Granting access to heat database
+  mysql_user: >
+    name=heat
+    host={{ item }}
+    password={{ heat_dbpass }}
+    priv=heat.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Create heat user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=heat
+    password={{heat_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user heat in the project service
+  os_user_role:
+    cloud: lowcost
+    user: heat
+    role: admin
+    project: service
+
+- name: Create a service for heat
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: heat
+    service_type: orchestration
+    description: Orchestration
+
+- name: Create a service for heat-cfn
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: heat-cfn
+    service_type: cloudformation
+    description: Orchestration
+
+- name: Create orchestration public service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration public http://{{short_controller_name}}:8004/v1/%(tenant_id)s
+
+- name: Create orchestration internal service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration internal http://{{short_controller_name}}:8004/v1/%(tenant_id)s
+
+- name: Create orchestration admin service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration admin http://{{short_controller_name}}:8004/v1/%(tenant_id)s
+
+- name: Create cloudformation public service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation public http://{{short_controller_name}}:8000/v1
+
+- name: Create cloudformation internal service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation internal http://{{short_controller_name}}:8000/v1
+
+- name: Create cloudformation admin service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation admin http://{{short_controller_name}}:8000/v1
+
+- name: Create heat domain that contains projects and users for stacks
+  os_keystone_domain:
+     cloud: lowcost
+     state: present
+     name: heat
+     description: Stack projects and users
+
+- name: Create heat_domain_admin user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=heat_domain_admin
+    password={{heat_dbpass}}
+    domain=heat
+
+- name: Add the admin role to the heat_domain_admin user in the heat domain by the heat_domain_admin user
+  command: openstack --os-cloud=lowcost role add --domain heat --user-domain heat --user heat_domain_admin admin
+
+- name: Create the heat_stack_owner role
+  command: openstack --os-cloud=lowcost  role create heat_stack_owner
+
+- name: Add the heat_stack_owner role to the demo project and user to enable stack management by the demo user
+  command: openstack --os-cloud=lowcost role add --project demo --user demo heat_stack_owner
+
+- name: Create the heat_stack_user role
+  command: openstack --os-cloud=lowcost  role create heat_stack_user
+
+- name: Install heat (Be patient)
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - heat-api
+    - heat-api-cfn
+    - heat-engine
+
+- name: Setup heat.conf on controller
+  template: >
+    src=etc/heat/heat.conf
+    dest=/etc/heat/heat.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Populate the heat database (Be patient)
+  command: 'su -s /bin/sh -c "heat-manage db_sync" heat'
+  notify:
+    - restart heat-api
+    - restart heat-api-cfn
+    - restart heat-engine

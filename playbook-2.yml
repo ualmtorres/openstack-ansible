@@ -53,3 +53,8 @@
   become: true
   roles:
     - cinder_storage
+
+- hosts: controller
+  become: true
+  roles:
+    - heat
