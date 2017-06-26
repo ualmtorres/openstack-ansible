@@ -13,6 +13,11 @@
   roles:
     - compute_interface
 
+- hosts: block
+  become: true
+  roles:
+    - block_interface
+
 - hosts: all
   become: true
   tasks:

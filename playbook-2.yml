@@ -3,7 +3,7 @@
   roles:
     - ntp_server
 
-- hosts: compute
+- hosts: compute, block
   become: true
   roles:
     - ntp_others
@@ -45,4 +45,11 @@
   become: true
   roles:
     - horizon
+    - image_upload
     - network_setup
+    - cinder_controller
+
+- hosts: block
+  become: true
+  roles:
+    - cinder_storage

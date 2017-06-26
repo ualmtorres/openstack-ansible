@@ -1,15 +1,17 @@
 
 # IP's
-controller_management_ip: 192.168.0.18
-compute01_management_ip: 192.168.0.19
+controller_management_ip: 192.168.0.39
+compute01_management_ip: 192.168.0.40
+block_management_ip: 192.168.0.42
 
-controller_provider_ip: 10.0.0.19
-compute01_provider_ip: 10.0.0.20
+controller_provider_ip: 10.0.0.46
+compute01_provider_ip: 10.0.0.47
 
 
 # Consider overlay_interface_ip_address as controller_management_ip
-overlay_interface_ip_address: 192.168.0.18
-compute_overlay_interface_ip_address: 192.168.0.19
+overlay_interface_ip_address: 192.168.0.39
+# Consider overlay_interface_ip_address as compute_management_ip
+compute_overlay_interface_ip_address: 192.168.0.40
 
 # Interface names
 management_interface: "ens4"
@@ -34,6 +36,7 @@ glance_dbpass: "asdasd"
 nova_dbpass: "asdasd"
 neutron_dbpass: "asdasd"
 placement_pass: "asdasd"
+cinder_dbpass: "asdasd"
 
 
 
@@ -45,3 +48,13 @@ short_controller_name: "controller"
 region: "RegionOne"
 
 metadata_secret: "asdasd"
+
+network_name: "lowcost-net"
+subnet_name: "lowcost-subnet"
+allocation_pool_start: 10.0.0.201
+allocation_pool_end: 10.0.0.250
+dns_name_servers:
+  - 150.214.156.2
+subnet_range: 10.0.0.0/24
+
+block_storage_device: vdb

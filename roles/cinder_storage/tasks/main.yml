@@ -1,0 +1,34 @@
+- name: Install lvm2 on storage node (Be patient)
+  apt:
+    name: lvm2
+    state: latest
+
+- name: Install cinder-volume on storage node (Be patient)
+  apt:
+    name: cinder-volume
+    state: latest
+
+- name: Create the LVM physical volume
+  command: 'pvcreate /dev/{{block_storage_device}}'
+
+- name: Create the LVM volume group cinder-volumes
+  command: 'vgcreate cinder-volumes /dev/{{block_storage_device}}'
+
+- name: Setup lvm.conf on block storage
+  template: >
+    src=etc/lvm/lvm.conf
+    dest=/etc/lvm/lvm.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup cinder.conf on block storage
+  template: >
+    src=etc/cinder/cinder.conf
+    dest=/etc/cinder/cinder.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart tgt
+    - restart cinder-volume

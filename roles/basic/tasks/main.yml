@@ -16,6 +16,9 @@
       # Compute
       {{compute01_management_ip}} compute01
 
+      # Block storage
+      {{block_management_ip}} block
+
 - name: "Install pip"
   apt:
     name: python-pip

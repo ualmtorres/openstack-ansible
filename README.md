@@ -24,11 +24,13 @@ Trabajo en progreso: Actualmente, este playbook instala los componentes siguient
 * Nova
 * Neutron
 * Horizon
+* Cinder
 ---
 
 ## Consideraciones
 
 * Este playbook instala OpenStack en un nodo de control (`control`) y un nodo de cómputo (`compute01`).
+* El componente Cinder para el almacenamiento de bloques se instala en el nodo de control al no haber sido posible configurarlo en un nodo aparte. Tras seguir los pasos de la Guía oficial de instalación, el nodo de control no era capaz de descubrir los servicios de Cinder si se encontraban en un nodo aparte.
 * La instalación de OpenStack en los dos nodos remotos (`controller` y `compute01`) la haremos directamente desde el nodo de control de Ansible. Por tanto, los dos nodos remotos tendrán:
   * Una dirección IP accesible desde el nodo de control de Ansible. Las direcciones IP de los nodos remotos están en el archivo `hosts.cfg`.
   * La clave pública SSH correspondiente a clave SSH privada instalada en el nodo de control de Ansible.

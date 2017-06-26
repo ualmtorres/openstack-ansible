@@ -1,0 +1,89 @@
+- name: Create cinder database
+  mysql_db:
+    name: cinder
+    state: present
+
+- name: Granting access to cinder database
+  mysql_user: >
+    name=cinder
+    host={{ item }}
+    password={{ cinder_dbpass }}
+    priv=cinder.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Create cinder user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=cinder
+    password={{cinder_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user cinder in the project service
+  os_user_role:
+    cloud: lowcost
+    user: cinder
+    role: admin
+    project: service
+
+- name: Create a service for cinderv2
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: cinderv2
+    service_type: volumev2
+    description: OpenStack Block Storage
+
+- name: Create a service for cinderv3
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: cinderv3
+    service_type: volumev3
+    description: OpenStack Block Storage
+
+- name: Create volumev2 public service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 public http://{{short_controller_name}}:8776/v2/%(project_id)s
+
+- name: Create volumev2 internal service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 internal http://{{short_controller_name}}:8776/v2/%(project_id)s
+
+- name: Create volumev2 admin service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 admin http://{{short_controller_name}}:8776/v2/%(project_id)s
+
+- name: Create volumev3 public service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 public http://{{short_controller_name}}:8776/v3/%(project_id)s
+
+- name: Create volumev3 internal service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 internal http://{{short_controller_name}}:8776/v3/%(project_id)s
+
+- name: Create volumev3 admin service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 admin http://{{short_controller_name}}:8776/v3/%(project_id)s
+
+- name: Install cinder (Be patient)
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - cinder-api
+    - cinder-scheduler
+
+- name: Setup cinder.conf on controller
+  template: >
+    src=etc/cinder/cinder.conf
+    dest=/etc/cinder/cinder.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Populate the cinder database (Be patient)
+  command:  'su -s /bin/sh -c "cinder-manage db sync" cinder'
+  notify:
+    - restart cinder-scheduler
+    - restart apache
