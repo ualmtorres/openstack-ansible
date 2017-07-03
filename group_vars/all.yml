@@ -1,17 +1,19 @@
 
 # IP's
 controller_management_ip: 192.168.0.39
-compute01_management_ip: 192.168.0.40
+
+# Compute node managment IP is obtained from ansible_ens4.ipv4.address.
+# Replace the interface name (e.g ens4, eth1, ...) with the yours.
+#compute01_management_ip: 192.168.0.40
+
 block_management_ip: 192.168.0.42
-
-controller_provider_ip: 10.0.0.46
-compute01_provider_ip: 10.0.0.47
-
 
 # Consider overlay_interface_ip_address as controller_management_ip
 overlay_interface_ip_address: 192.168.0.39
 # Consider overlay_interface_ip_address as compute_management_ip
-compute_overlay_interface_ip_address: 192.168.0.40
+# Compute node managment IP is obtained from ansible_ens4.ipv4.address.
+# Replace the interface name (e.g ens4, eth1, ...) with the yours.
+#compute_overlay_interface_ip_address: 192.168.0.40
 
 # Interface names
 management_interface: "ens4"
@@ -23,6 +25,14 @@ management_gateway: 192.168.0.1
 provider_network: 10.0.0.0
 provider_gateway: 10.0.0.1
 dns: 150.214.156.2 8.8.8.8
+
+computeNodes:
+  - {name: compute01, management_ip: 192.168.0.40}
+  - {name: compute02, management_ip: 192.168.0.41}
+
+objectNodes:
+  - {name: object01, management_ip: 192.168.0.43}
+  - {name: object02, management_ip: 192.168.0.44}
 
 # NTP server
 ntp_server: 1.es.pool.ntp.org
