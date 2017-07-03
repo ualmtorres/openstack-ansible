@@ -1,0 +1,94 @@
+- name: Create barbican database
+  mysql_db:
+    name: barbican
+    state: present
+
+- name: Granting access to barbican database
+  mysql_user: >
+    name=barbican
+    host={{ item }}
+    password={{ barbican_dbpass }}
+    priv=barbican.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Create barbican user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=barbican
+    password={{barbican_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user barbican in the project service
+  os_user_role:
+    cloud: lowcost
+    user: barbican
+    role: admin
+    project: service
+
+- name: Create the creator role
+  command: openstack --os-cloud=lowcost  role create creator
+
+- name: Grant the creator role on the user barbican in the project service
+  os_user_role:
+    cloud: lowcost
+    user: barbican
+    role: creator
+    project: service
+
+- name: Create a service for barbican
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: barbican
+    service_type: key-manager
+    description: Key Manager
+
+- name: Create key-manager public service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager public http://{{short_controller_name}}:9311
+
+- name: Create key-manager internal service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager internal http://{{short_controller_name}}:9311
+
+- name: Create key-manager admin service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager admin http://{{short_controller_name}}:9311
+
+- name: "Update packages for barbican"
+  apt:
+    update_cache: yes
+
+- name: Install barbican (Be patient)
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - barbican-api
+    - barbican-keystone-listener
+    - barbican-worker
+
+- name: Setup barbican.conf on controller
+  template: >
+    src=etc/barbican/barbican.conf
+    dest=/etc/barbican/barbican.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup barbican-api-paste.ini on controller
+  template: >
+    src=etc/barbican/barbican-api-paste.ini
+    dest=/etc/barbican/barbican-api-paste.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Build barbican database (Be patient)
+  command: 'su -s /bin/sh -c "barbican-manage db upgrade" barbican'
+  notify:
+    - restart apache

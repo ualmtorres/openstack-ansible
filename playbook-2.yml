@@ -58,3 +58,14 @@
   become: true
   roles:
     - heat
+
+#- hosts: compute
+#  become: true
+#  roles:
+#    - ceilometer_compute
+
+- hosts: controller
+  become: true
+  roles:
+#    - ceilometer_controller
+    - barbican
