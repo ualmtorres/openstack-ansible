@@ -1,0 +1,11 @@
+- name: restart trove-api
+  service: name=trove-api state=restarted
+
+- name: restart trove-taskmanager
+  service: name=trove-taskmanager state=restarted
+
+- name: restart trove-conductor
+  service: name=trove-conductor state=restarted
+
+- name: restart apache
+  service: name=apache2 state=restarted

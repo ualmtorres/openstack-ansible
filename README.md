@@ -25,6 +25,10 @@ Trabajo en progreso: Actualmente, este playbook instala los componentes siguient
 * Neutron
 * Horizon
 * Cinder
+* Heat
+* Barbican
+* Magnum
+* Trove
 ---
 
 ## Consideraciones

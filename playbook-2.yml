@@ -70,3 +70,4 @@
 #    - ceilometer_controller
     - barbican
     - magnum
+    - trove

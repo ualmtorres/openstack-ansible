@@ -1,0 +1,102 @@
+- name: Create trove database
+  mysql_db:
+    name: trove
+    state: present
+
+- name: Granting access to trove database
+  mysql_user: >
+    name=trove
+    host={{ item }}
+    password={{ trove_dbpass }}
+    priv=trove.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "localhost"
+    - "::1"
+    - "%"
+
+- name: Create trove user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=trove
+    password={{trove_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user trove in the project service
+  os_user_role:
+    cloud: lowcost
+    user: trove
+    role: admin
+    project: service
+
+- name: Create a service for trove
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: trove
+    service_type: database
+    description: Database
+
+- name: Create database public service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database public http://{{short_controller_name}}:8779/v1.0/%(tenant_id)s
+
+- name: Create database internal service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database internal http://{{short_controller_name}}:8779/v1.0/%(tenant_id)s
+
+- name: Create database admin service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database admin http://{{short_controller_name}}:8779/v1.0/%(tenant_id)s
+
+- name: Install Trove (Be patient)
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - python-trove
+    - python-troveclient
+    - python-glanceclient
+    - trove-common
+    - trove-api
+    - trove-taskmanager
+    - trove-conductor
+
+- name: Setup trove.conf on controller
+  template: >
+    src=etc/trove/trove.conf
+    dest=/etc/trove/trove.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup trove-taskmanager.conf on controller
+  template: >
+    src=etc/trove/trove-taskmanager.conf
+    dest=/etc/trove/trove-taskmanager.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup trove-conductor.conf on controller
+  template: >
+    src=etc/trove/trove-conductor.conf
+    dest=/etc/trove/trove-conductor.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Build trove database (Be patient)
+  command: 'su -s /bin/sh -c "trove-manage db_sync" trove'
+  notify:
+    - restart trove-api
+    - restart trove-taskmanager
+    - restart trove-conductor
+
+- name: Install the Trove Dashboard for Horizon
+  pip: name=trove-dashboard
+
+- name: Copy trove-dashboard/enabled files to openstack_dashboard/local/enabled/
+  shell: 'cp /usr/local/lib/python2.7/dist-packages/trove_dashboard/enabled/*database* /usr/share/openstack-dashboard/openstack_dashboard/local/enabled'
+  notify:
+    - restart apache
