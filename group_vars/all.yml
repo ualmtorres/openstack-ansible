@@ -44,6 +44,7 @@ barbican_dbpass: "asdasd"
 pkcs11_session_pass: "asdasd"
 kmip_pass: "asdasd"
 dogtag_pass: "asdasd"
+magnum_dbpass: "asdasd"
 
 admin_pass: "asdasd"
 demo_pass: "asdasd"

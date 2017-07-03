@@ -1,0 +1,5 @@
+- name: restart magnum-api
+  service: name=magnum-api state=restarted
+
+- name: restart magnum-conductor
+  service: name=magnum-conductor state=restarted

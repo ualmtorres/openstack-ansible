@@ -69,3 +69,4 @@
   roles:
 #    - ceilometer_controller
     - barbican
+    - magnum
