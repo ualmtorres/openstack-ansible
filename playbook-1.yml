@@ -8,7 +8,7 @@
   roles:
     - controller_interface
 
-- hosts: compute
+- hosts: compute, object
   become: true
   roles:
     - compute_interface

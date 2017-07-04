@@ -5,7 +5,7 @@
       # The management network interface
       auto {{management_interface}}
       iface {{management_interface}} inet static
-        address {{ ansible_ens4.ipv4.address }}
+        address {{ my_nodes[ansible_hostname].management_ip }}
         netmask 255.255.255.0
         network {{management_network}}
 #        gateway {{management_gateway}}

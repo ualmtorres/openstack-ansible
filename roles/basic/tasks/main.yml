@@ -15,6 +15,7 @@
 
       # Block storage
       {{block_management_ip}} block
+    marker: "# {mark} ANSIBLE MANAGED BLOCK controller and block nodes"
 
 - name: "Adding openstack compute node names to /etc/hosts"
   blockinfile:

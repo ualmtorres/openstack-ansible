@@ -1,15 +1,15 @@
 
 # IP's
-controller_management_ip: 192.168.0.39
+controller_management_ip: 192.168.0.44
 
 # Compute node managment IP is obtained from ansible_ens4.ipv4.address.
 # Replace the interface name (e.g ens4, eth1, ...) with the yours.
 #compute01_management_ip: 192.168.0.40
 
-block_management_ip: 192.168.0.42
+block_management_ip: 192.168.0.48
 
 # Consider overlay_interface_ip_address as controller_management_ip
-overlay_interface_ip_address: 192.168.0.39
+overlay_interface_ip_address: 192.168.0.44
 # Consider overlay_interface_ip_address as compute_management_ip
 # Compute node managment IP is obtained from ansible_ens4.ipv4.address.
 # Replace the interface name (e.g ens4, eth1, ...) with the yours.
@@ -27,12 +27,12 @@ provider_gateway: 10.0.0.1
 dns: 150.214.156.2 8.8.8.8
 
 computeNodes:
-  - {name: compute01, management_ip: 192.168.0.40}
-  - {name: compute02, management_ip: 192.168.0.41}
+  - {name: compute01, management_ip: 192.168.0.45}
+  - {name: compute02, management_ip: 192.168.0.46}
 
 objectNodes:
-  - {name: object01, management_ip: 192.168.0.43}
-  - {name: object02, management_ip: 192.168.0.44}
+  - {name: object01, management_ip: 192.168.0.47}
+  - {name: object02, management_ip: 192.168.0.49}
 
 # NTP server
 ntp_server: 1.es.pool.ntp.org
@@ -74,3 +74,13 @@ dns_name_servers:
 subnet_range: 10.0.0.0/24
 
 block_storage_device: vdb
+
+my_nodes:
+  controller: {name: controller, management_ip: 192.168.0.44}
+  compute01: {name: compute01, management_ip: 192.168.0.45}
+  compute02: {name: compute02, management_ip: 192.168.0.46}
+  block: {name: block, management_ip: 192.168.0.48}
+  object01: {name: object01, management_ip: 192.168.0.47}
+  object02: {name: object02, management_ip: 192.168.0.49}
+
+
