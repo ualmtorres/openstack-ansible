@@ -47,16 +47,7 @@
     - horizon
     - image_upload
     - network_setup
-    - cinder_controller
-
-- hosts: block
-  become: true
-  roles:
-    - cinder_storage
-
-- hosts: controller
-  become: true
-  roles:
+    - cinder
     - heat
 
 #- hosts: compute
