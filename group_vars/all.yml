@@ -4,7 +4,7 @@ controller_management_ip: 192.168.0.44
 
 # Compute node managment IP is obtained from ansible_ens4.ipv4.address.
 # Replace the interface name (e.g ens4, eth1, ...) with the yours.
-#compute01_management_ip: 192.168.0.40
+#compute01_management_ip: 192.168.0.4
 
 block_management_ip: 192.168.0.48
 
@@ -14,6 +14,13 @@ overlay_interface_ip_address: 192.168.0.44
 # Compute node managment IP is obtained from ansible_ens4.ipv4.address.
 # Replace the interface name (e.g ens4, eth1, ...) with the yours.
 #compute_overlay_interface_ip_address: 192.168.0.40
+
+nas_public_ip: 192.168.64.13
+nas_private_ip: 10.0.0.13
+nas_port: 5000
+nas_user: "admin"
+nas_password: "LH0ftG6E"
+nas_volume: "Volume1"
 
 # Interface names
 management_interface: "ens4"
@@ -82,5 +89,3 @@ my_nodes:
   block: {name: block, management_ip: 192.168.0.48}
   object01: {name: object01, management_ip: 192.168.0.47}
   object02: {name: object02, management_ip: 192.168.0.49}
-
-
