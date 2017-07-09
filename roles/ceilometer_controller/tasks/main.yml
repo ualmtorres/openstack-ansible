@@ -1,0 +1,129 @@
+- name: Create ceilometer user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=ceilometer
+    password={{ceilometer_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user ceilometer in the project service
+  os_user_role:
+    cloud: lowcost
+    user: ceilometer
+    role: admin
+    project: service
+
+- name: Create a service for ceilometer
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: ceilometer
+    service_type: metering
+    description: Telemetry
+
+- name: Create gnocchi user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=gnocchi
+    password={{gnocchi_pass}}
+    domain=default
+
+- name: Create a service for gnocchi
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: gnocchi
+    service_type: metric
+    description: Metric Service
+
+- name: Create metric public service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} metric public http://{{ short_controller_name }}:8041
+
+- name: Create metric internal service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} metric internal http://{{ short_controller_name }}:8041
+
+- name: Create metric admin service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} metric admin http://{{ short_controller_name }}:8041
+
+- name: Install Ceilometer on controller (Be patient)
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - ceilometer-collector
+    - ceilometer-agent-central
+    - ceilometer-agent-notification
+    - python-ceilometerclient
+
+- name: Install Gnocchi
+  pip:
+    name={{ item }}
+  with_items:
+    - gnocchi
+    - gnocchi[keystone]
+    - gnocchi[mysql]
+    - gnocchiclient
+
+- name: Create gnocchi database
+  mysql_db:
+    name: gnocchi
+    state: present
+
+- name: Granting access to gnocchi database
+  mysql_user: >
+    name=gnocchi
+    host={{ item }}
+    password={{ gnocchi_pass }}
+    priv=gnocchi.*:ALL
+    append_privs=yes
+  with_items:
+    - "{{ controller_management_ip }}"
+    - "127.0.0.1"
+    - "::1"
+    - "localhost"
+    - "%"
+
+- name: Create /etc/gnocchi directory
+  file: path=/etc/gnocchi state=directory
+
+- name: Setup gnocchi.conf on controller node
+  template: >
+    src=etc/gnocchi/gnocchi.conf
+    dest=/etc/gnocchi/gnocchi.conf
+    owner=root
+    group=root
+    mode=0644
+
+- name: Install uwsgi
+  apt:
+    name: uwsgi-core
+    state: latest
+
+- name: Setup uwsgi.ini on controller node
+  template: >
+    src=etc/gnocchi/uwsgi.ini
+    dest=/etc/gnocchi/uwsgi.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Run gnocchi-upgrade
+  command: gnocchi-upgrade
+
+- name: Run gnocchi-api
+  shell: 'gnocchi-api &'
+
+#- name: Run gnocchi-api as a wsgi application
+#  become: false
+#  command: uwsgi /etc/gnocchi/uwsgi.ini
+
+- name: Run gnocchi-metricd
+  shell: 'gnocchi-metricd &'
+
+- name: Create Ceilometer resources in Gnocchi
+  command: ceilometer-upgrade --skip-metering-database
+  notify:
+    - restart ceilometer-agent-central
+    - restart ceilometer-agent-notification
+    - restart ceilometer-collector

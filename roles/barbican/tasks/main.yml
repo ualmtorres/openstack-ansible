@@ -11,7 +11,7 @@
     priv=barbican.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -51,13 +51,13 @@
     description: Key Manager
 
 - name: Create key-manager public service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager public http://{{short_controller_name}}:9311
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager public http://{{ nodes.controller.name }}:9311
 
 - name: Create key-manager internal service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager internal http://{{short_controller_name}}:9311
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager internal http://{{ nodes.controller.name }}:9311
 
 - name: Create key-manager admin service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager admin http://{{short_controller_name}}:9311
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} key-manager admin http://{{ nodes.controller.name }}:9311
 
 - name: "Update packages for barbican"
   apt:

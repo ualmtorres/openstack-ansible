@@ -10,7 +10,7 @@
     password={{ glance_dbpass }}
     priv=glance.*:ALL
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -40,13 +40,13 @@
     description: OpenStack Image
 
 - name: Create public service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image public http://{{short_controller_name}}:9292
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image public http://{{nodes.controller.name}}:9292
 
 - name: Create internal service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image internal http://{{short_controller_name}}:9292
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image internal http://{{nodes.controller.name}}:9292
 
 - name: Create admin service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image admin http://{{short_controller_name}}:9292
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} image admin http://{{nodes.controller.name}}:9292
 
 - name: Install glance (Be patient)
   apt:

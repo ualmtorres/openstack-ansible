@@ -3,7 +3,7 @@
   roles:
     - ntp_server
 
-- hosts: compute, block
+- hosts: compute, block, network, object
   become: true
   roles:
     - ntp_others
@@ -22,6 +22,7 @@
     - keystone_controller
     - keystone_setup
     - glance_controller
+    - image_upload
     - nova_controller
 
 - hosts: compute
@@ -36,6 +37,11 @@
     - nova_host_discovery
     - neutron_controller
 
+- hosts: network
+  become: true
+  roles:
+    - neutron_network
+
 - hosts: compute
   become: true
   roles:
@@ -45,7 +51,6 @@
   become: true
   roles:
     - horizon
-    - image_upload
     - network_setup
     - cinder
     - heat

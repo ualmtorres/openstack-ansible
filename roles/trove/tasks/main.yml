@@ -11,7 +11,7 @@
     priv=trove.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -41,13 +41,13 @@
     description: Database
 
 - name: Create database public service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database public http://{{short_controller_name}}:8779/v1.0/%(tenant_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database public http://{{ nodes.controller.name }}:8779/v1.0/%(tenant_id)s
 
 - name: Create database internal service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database internal http://{{short_controller_name}}:8779/v1.0/%(tenant_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database internal http://{{ nodes.controller.name }}:8779/v1.0/%(tenant_id)s
 
 - name: Create database admin service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database admin http://{{short_controller_name}}:8779/v1.0/%(tenant_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} database admin http://{{ nodes.controller.name }}:8779/v1.0/%(tenant_id)s
 
 - name: Install Trove (Be patient)
   apt:

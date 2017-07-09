@@ -11,7 +11,7 @@
     priv=heat.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -49,22 +49,22 @@
     description: Orchestration
 
 - name: Create orchestration public service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration public http://{{short_controller_name}}:8004/v1/%(tenant_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration public http://{{ nodes.controller.name }}:8004/v1/%(tenant_id)s
 
 - name: Create orchestration internal service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration internal http://{{short_controller_name}}:8004/v1/%(tenant_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration internal http://{{ nodes.controller.name }}:8004/v1/%(tenant_id)s
 
 - name: Create orchestration admin service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration admin http://{{short_controller_name}}:8004/v1/%(tenant_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} orchestration admin http://{{ nodes.controller.name }}:8004/v1/%(tenant_id)s
 
 - name: Create cloudformation public service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation public http://{{short_controller_name}}:8000/v1
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation public http://{{ nodes.controller.name }}:8000/v1
 
 - name: Create cloudformation internal service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation internal http://{{short_controller_name}}:8000/v1
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation internal http://{{ nodes.controller.name }}:8000/v1
 
 - name: Create cloudformation admin service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation admin http://{{short_controller_name}}:8000/v1
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} cloudformation admin http://{{ nodes.controller.name }}:8000/v1
 
 - name: Create heat domain that contains projects and users for stacks
   os_keystone_domain:

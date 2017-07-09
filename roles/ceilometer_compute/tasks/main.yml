@@ -1,0 +1,15 @@
+- name: Install ceilometer on compute nodes (Be patient)
+  apt:
+    name: ceilometer-agent-compute
+    state: latest
+
+- name: Setup ceilometer.conf on compute nodes
+  template: >
+    src=etc/ceilometer/ceilometer.conf
+    dest=/etc/ceilometer/ceilometer.conf
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart ceilometer-agent-compute
+    - restart nova-compute

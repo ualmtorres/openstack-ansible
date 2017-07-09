@@ -11,7 +11,7 @@
     priv=magnum.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -41,13 +41,13 @@
     description: OpenStack Container Infrastructure Management Service
 
 - name: Create container-infra public service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} container-infra public http://{{short_controller_name}}:9511/v1
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} container-infra public http://{{ nodes.controller.name }}:9511/v1
 
 - name: Create container-infra internal service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} container-infra internal http://{{short_controller_name}}:9511/v1
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} container-infra internal http://{{ nodes.controller.name }}:9511/v1
 
 - name: Create container-infra admin service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} container-infra admin http://{{short_controller_name}}:9511/v1
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} container-infra admin http://{{ nodes.controller.name }}:9511/v1
 
 - name: Create the magnum domain
   os_keystone_domain:

@@ -15,7 +15,7 @@
     priv=nova_api.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -29,7 +29,7 @@
     priv=nova.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -43,7 +43,7 @@
     priv=nova_cell0.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -73,13 +73,13 @@
     description: OpenStack Compute
 
 - name: Create compute public service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute public http://{{short_controller_name}}:8774/v2.1
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute public http://{{nodes.controller.name}}:8774/v2.1
 
 - name: Create compute internal service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute internal http://{{short_controller_name}}:8774/v2.1
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute internal http://{{nodes.controller.name}}:8774/v2.1
 
 - name: Create compute admin service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute admin http://{{short_controller_name}}:8774/v2.1
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} compute admin http://{{nodes.controller.name}}:8774/v2.1
 
 - name: Create placement user
   os_user:
@@ -105,13 +105,13 @@
     description: Placement API
 
 - name: Create placement public service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement public http://{{short_controller_name}}:8778
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement public http://{{nodes.controller.name}}:8778
 
 - name: Create placement internal service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement internal http://{{short_controller_name}}:8778
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement internal http://{{nodes.controller.name}}:8778
 
 - name: Create placement admin service API endpoint with keystone_service
-  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement admin http://{{short_controller_name}}:8778
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} placement admin http://{{nodes.controller.name}}:8778
 
 - name: Install nova (Be patient)
   apt:

@@ -1,0 +1,12 @@
+- name: "Setup provider network interfaces"
+  blockinfile:
+    name: /etc/network/interfaces
+    block: |
+      # The management network interface
+      auto {{provider_interface}}
+      iface {{provider_interface}} inet static
+        address {{nodes_by_name[ansible_hostname].provider_ip}}
+        netmask 255.255.255.0
+        network {{provider_network}}
+        mtu {{ MTU }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK provider interface"

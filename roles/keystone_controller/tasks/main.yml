@@ -11,7 +11,7 @@
     priv=keystone.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "::1"
     - "localhost"
@@ -43,7 +43,7 @@
   command: 'keystone-manage credential_setup --keystone-user keystone --keystone-group keystone'
 
 - name: Bootstrap the Identity service
-  command: 'keystone-manage bootstrap --bootstrap-password {{ admin_pass}} --bootstrap-admin-url http://controller:35357/v3/ --bootstrap-internal-url http://controller:5000/v3/ --bootstrap-public-url http://controller:5000/v3/ --bootstrap-region-id RegionOne'
+  command: 'keystone-manage bootstrap --bootstrap-password {{ admin_pass}} --bootstrap-admin-url http://{{ nodes.controller.name }}:35357/v3/ --bootstrap-internal-url http://{{ nodes.controller.name }}:5000/v3/ --bootstrap-public-url http://{{ nodes.controller.management_ip }}:5000/v3/ --bootstrap-region-id {{ region }}'
 
 - name: Setup apache2.conf on controller
   template: >

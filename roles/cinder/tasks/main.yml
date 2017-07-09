@@ -11,7 +11,7 @@
     priv=cinder.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"
@@ -49,22 +49,22 @@
     description: OpenStack Block Storage
 
 - name: Create volumev2 public service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 public http://{{short_controller_name}}:8776/v2/%(project_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 public http://{{ nodes.controller.name }}:8776/v2/%(project_id)s
 
 - name: Create volumev2 internal service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 internal http://{{short_controller_name}}:8776/v2/%(project_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 internal http://{{ nodes.controller.name }}:8776/v2/%(project_id)s
 
 - name: Create volumev2 admin service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 admin http://{{short_controller_name}}:8776/v2/%(project_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 admin http://{{ nodes.controller.name }}:8776/v2/%(project_id)s
 
 - name: Create volumev3 public service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 public http://{{short_controller_name}}:8776/v3/%(project_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 public http://{{ nodes.controller.name }}:8776/v3/%(project_id)s
 
 - name: Create volumev3 internal service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 internal http://{{short_controller_name}}:8776/v3/%(project_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 internal http://{{ nodes.controller.name }}:8776/v3/%(project_id)s
 
 - name: Create volumev3 admin service API endpoint with keystone_service
-  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 admin http://{{short_controller_name}}:8776/v3/%(project_id)s
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev3 admin http://{{ nodes.controller.name }}:8776/v3/%(project_id)s
 
 - name: Install cinder (Be patient)
   apt:

@@ -3,20 +3,15 @@
   roles:
     - basic
 
-- hosts: controller
+- hosts: all
   become: true
   roles:
-    - controller_interface
+    - management_tunnel_interfaces
 
-- hosts: compute, object
+- hosts: controller, network
   become: true
   roles:
-    - compute_interface
-
-- hosts: block
-  become: true
-  roles:
-    - block_interface
+    - provider_interface
 
 - hosts: all
   become: true
@@ -28,6 +23,3 @@
       shell: reboot
       async: 0
       poll: 0
-
-#    - name: Wait for the server to finish rebooting
-#      local_action: wait_for host="{{ inventory_hostname }}" search_regex=OpenSSH port=22 timeout=120

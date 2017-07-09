@@ -1,0 +1,21 @@
+- name: "Setup management and tunnel network interfaces"
+  blockinfile:
+    name: /etc/network/interfaces
+    block: |
+      # The management network interface
+      auto {{management_interface}}
+      iface {{management_interface}} inet static
+        address {{ nodes_by_name[ansible_hostname].management_ip }}
+        netmask 255.255.255.0
+        network {{management_network}}
+        dns {{ dns }}
+        mtu {{ MTU }}
+
+      # The tunnel network interface
+      auto {{tunnel_interface}}
+      iface {{tunnel_interface}} inet static
+        address {{ nodes_by_name[ansible_hostname].tunnel_ip }}
+        netmask 255.255.255.0
+        network {{tunnel_network}}
+        mtu {{ MTU }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK management and tunnel interfaces"

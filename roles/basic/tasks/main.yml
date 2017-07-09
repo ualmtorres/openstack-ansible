@@ -6,26 +6,29 @@
   apt:
     upgrade: dist
 
-- name: "Adding openstack controller and block host names to /etc/hosts"
+- name: "Adding openstack controller, network and block host names to /etc/hosts"
   blockinfile:
     name: /etc/hosts
     block: |
       # Controller
-      {{controller_management_ip}} controller
+      {{nodes.controller.management_ip}} {{nodes.controller.name}}
+
+      # Network node
+      {{nodes.network.management_ip}} {{nodes.network.name}}
 
       # Block storage
-      {{block_management_ip}} block
-    marker: "# {mark} ANSIBLE MANAGED BLOCK controller and block nodes"
+      {{nodes.block.management_ip}} {{nodes.block.name}}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK controller, network  and block nodes"
+
 
 - name: "Adding openstack compute node names to /etc/hosts"
   blockinfile:
     name: /etc/hosts
     block: |
       {{item.management_ip}} {{item.name}}
-
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
   with_items:
-      - "{{computeNodes}}"
+      - "{{nodes.compute}}"
 
 - name: "Adding openstack object node names to /etc/hosts"
   blockinfile:
@@ -35,7 +38,7 @@
 
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
   with_items:
-      - "{{objectNodes}}"
+      - "{{nodes.object}}"
 
 - name: "Install pip"
   apt:

@@ -1,7 +1,7 @@
 clouds:
   lowcost:
     auth:
-      auth_url: http://controller:35357/v3
+      auth_url: http://{{ nodes.controller.name }}:35357/v3
       username: admin
       password: {{ admin_pass }}
       project_name: admin
