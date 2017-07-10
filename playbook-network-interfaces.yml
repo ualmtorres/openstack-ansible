@@ -1,0 +1,9 @@
+- hosts: all
+  become: true
+  roles:
+    - management_tunnel_interfaces
+
+- hosts: controller, network
+  become: true
+  roles:
+    - provider_interface

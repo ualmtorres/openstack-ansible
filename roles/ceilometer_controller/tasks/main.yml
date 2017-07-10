@@ -78,7 +78,7 @@
     priv=gnocchi.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.management_ip }}"
     - "127.0.0.1"
     - "::1"
     - "localhost"

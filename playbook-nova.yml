@@ -1,0 +1,15 @@
+- hosts: controller
+  become: true
+  roles:
+    - nova_controller
+
+- hosts: compute
+  become: true
+  roles:
+    - nova_compute
+
+- hosts: controller
+  become: true
+  roles:
+    - nova_flavor
+    - nova_host_discovery

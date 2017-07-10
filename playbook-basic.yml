@@ -1,0 +1,26 @@
+- hosts: all
+  become: true
+  roles:
+    - basic
+
+- hosts: controller
+  become: true
+  roles:
+    - ntp_server
+
+- hosts: compute, block, network, object
+  become: true
+  roles:
+    - ntp_others
+
+- hosts: all
+  become: true
+  roles:
+    - openstack_packages
+
+- hosts: controller
+  become: true
+  roles:
+    - sql_database
+    - rabbitmq
+    - memcached

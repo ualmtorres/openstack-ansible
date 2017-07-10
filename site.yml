@@ -1,2 +1,12 @@
- - include: playbook-1.yml
- - include: playbook-2.yml
+- include: playbook-network-interfaces.yml
+- include: playbook-network-reboot.yml
+- include: playbook-basic.yml
+- include: playbook-keystone.yml
+- include: playbook-glance.yml
+- include: playbook-nova.yml
+- include: playbook-neutron.yml
+- include: playbook-horizon.yml
+- include: playbook-cinder.yml
+- include: playbook-heat.yml
+- include: playbook-magnum.yml
+- include: playbook-trove.yml

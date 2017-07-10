@@ -1,49 +1,28 @@
-
-# IP's
-controller_management_ip: 10.0.0.72
-controller_tunnel_ip: 10.0.1.16
-
 # Compute node managment IP is obtained from ansible_ens4.ipv4.address.
 # Replace the interface name (e.g ens4, eth1, ...) with the yours.
-#compute01_management_ip: 192.168.0.4
 
-block_management_ip: 10.0.0.76
+# Consider overlay_interface_ip_address as nodes.controller.management_ip
 
-# Consider overlay_interface_ip_address as controller_management_ip
-overlay_interface_ip_address: 10.0.0.72
-# Consider overlay_interface_ip_address as compute_management_ip
-# Compute node managment IP is obtained from ansible_ens4.ipv4.address.
-# Replace the interface name (e.g ens4, eth1, ...) with the yours.
-#compute_overlay_interface_ip_address: 192.168.0.40
-
-nas_public_ip: 192.168.64.13
+nas_public_ip: xxx.xxx.xxx.xxx
 nas_private_ip: 10.0.0.13
 nas_port: 5000
 nas_user: "admin"
-nas_password: "LH0ftG6E"
+nas_password: "asdasd"
 nas_volume: "Volume1"
 
 # Interface names
-management_interface: "ens4"
-provider_interface: "ens3"
-tunnel_interface: "ens5"
+management_interface: "eth0"
+provider_interface: "rename4"
+tunnel_interface: "eth1"
 
 # Management network
 management_network: 10.0.0.0
 management_gateway: 10.0.0.2
 management_broadcast: 10.0.0.255
-provider_network: 192.168.0.0
-provider_gateway: 192.168.0.1
+provider_network: 192.168.64.0
+provider_gateway: 192.168.64.1
 tunnel_network: 10.0.1.0
 dns: 150.214.156.2 8.8.8.8
-
-computeNodes:
-  - {name: compute01, management_ip: 10.0.0.74}
-  - {name: compute02, management_ip: 10.0.0.75}
-
-objectNodes:
-  - {name: object01, management_ip: 10.0.0.77}
-  - {name: object02, management_ip: 10.0.0.78}
 
 # NTP server
 ntp_server: 1.es.pool.ntp.org
@@ -76,7 +55,6 @@ region: "RegionOne"
 
 metadata_secret: "asdasd"
 
-#external_flat_provider_network: "external"
 network_name: "lowcost-net"
 subnet_name: "lowcost-subnet"
 allocation_pool_start: 10.0.0.201
@@ -89,25 +67,25 @@ block_storage_device: vdb
 
 nodes:
   controller:
-    {name: controller, management_ip: 10.0.0.72, tunnel_ip: 10.0.1.16}
+    {name: controller, management_ip: 10.0.0.51, tunnel_ip: 10.0.1.51}
   network:
-    {name: network, management_ip: 10.0.0.73, tunnel_ip: 10.0.1.17}
+    {name: network, management_ip: 10.0.0.52, tunnel_ip: 10.0.1.52}
   compute:
-    - {name: compute01, management_ip: 10.0.0.74}
-    - {name: compute02, management_ip: 10.0.0.75}
+    - {name: compute01, management_ip: 10.0.0.53}
+    - {name: compute02, management_ip: 10.0.0.54}
   block:
-    {name: block, management_ip: 10.0.0.76}
+    {name: block, management_ip: 10.0.0.13}
   object:
-    - {name: object01, management_ip: 10.0.0.77}
-    - {name: object02, management_ip: 10.0.0.78}
+    - {name: object01, management_ip: 10.0.0.55}
+    - {name: object02, management_ip: 10.0.0.56}
 
 nodes_by_name:
-    controller: {name: controller, type: controller, management_ip: 10.0.0.72, tunnel_ip: 10.0.1.16, provider_ip: 192.168.0.17}
-    network: {name: network, type: network, management_ip: 10.0.0.73, tunnel_ip: 10.0.1.17, provider_ip: 192.168.0.18}
-    compute01: {name: compute01, type: compute, management_ip: 10.0.0.74, tunnel_ip: 10.0.1.18}
-    compute02: {name: compute02, type: compute, management_ip: 10.0.0.75, tunnel_ip: 10.0.1.19}
-    block: {name: block, type: block, management_ip: 10.0.0.76, tunnel_ip: 10.0.1.20}
-    object01: {name: object01, type: object, management_ip: 10.0.0.77, tunnel_ip: 10.0.1.21}
-    object02: {name: object02, type: object, management_ip: 10.0.0.78, tunnel_ip: 10.0.1.22}
+    controller: {name: controller, type: controller, management_ip: 10.0.0.51, tunnel_ip: 10.0.1.51, provider_ip: xxx.xxx.xxx.xxx}
+    network: {name: network, type: network, management_ip: 10.0.0.52, tunnel_ip: 10.0.1.52, provider_ip: xxx.xxx.xxx.xxx}
+    compute01: {name: compute01, type: compute, management_ip: 10.0.0.53, tunnel_ip: 10.0.1.53}
+    compute02: {name: compute02, type: compute, management_ip: 10.0.0.54, tunnel_ip: 10.0.1.54}
+    block: {name: block, type: block, management_ip: 10.0.0.13, tunnel_ip: 10.0.1.13}
+    object01: {name: object01, type: object, management_ip: 10.0.0.55, tunnel_ip: 10.0.1.55}
+    object02: {name: object02, type: object, management_ip: 10.0.0.56, tunnel_ip: 10.0.1.56}
 
-MTU: 1454
+MTU: 1500

@@ -11,7 +11,7 @@
     priv=cinder.*:ALL
     append_privs=yes
   with_items:
-    - "{{ controller_management_ip }}"
+    - "{{ nodes.controller.managment_ip }}"
     - "127.0.0.1"
     - "localhost"
     - "::1"

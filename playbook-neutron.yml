@@ -1,0 +1,19 @@
+- hosts: controller
+  become: true
+  roles:
+    - neutron_controller
+
+- hosts: network
+  become: true
+  roles:
+    - neutron_network
+
+- hosts: compute
+  become: true
+  roles:
+    - neutron_compute
+
+- hosts: controller
+  become: true
+  roles:
+    - network_setup

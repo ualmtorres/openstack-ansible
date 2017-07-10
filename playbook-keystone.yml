@@ -1,0 +1,5 @@
+- hosts: controller
+  become: true
+  roles:
+    - keystone_controller
+    - keystone_setup

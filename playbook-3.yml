@@ -1,0 +1,20 @@
+- hosts: 127.0.0.1
+  name: Prueba
+  tasks:
+    - name: Controller
+      debug: msg={{nodes.controller.name}}-{{nodes.controller.management_ip}}
+
+    - name: Block
+      debug: msg={{nodes.block.name}}-{{nodes.block.management_ip}}
+
+    - name: Compute
+      debug: msg={{item.name}}-{{item.management_ip}}
+      with_items:
+        "{{nodes.compute}}"
+
+    - name: Object
+      debug: msg={{item.name}}-{{item.management_ip}}
+      with_items:
+        "{{the_nodes}}"
+      when:
+        item.type == 'object'

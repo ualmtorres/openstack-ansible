@@ -1,0 +1,10 @@
+- hosts: all
+  become: true
+  tasks:
+    - debug:
+        msg: "Servers are going to be rebooted. Wait a moment and continue with the second playbook"
+
+    - name: Restart
+      shell: reboot
+      async: 0
+      poll: 0
