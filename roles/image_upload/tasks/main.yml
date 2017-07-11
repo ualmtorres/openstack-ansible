@@ -10,4 +10,5 @@
     container_format: bare
     disk_format: qcow2
     state: present
+    is_public: true
     filename: /tmp/cirros-0.3.5-x86_64-disk.img
