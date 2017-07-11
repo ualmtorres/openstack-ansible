@@ -32,6 +32,14 @@
     role: admin
     project: service
 
+- name: Create a service for cinder
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: cinder
+    service_type: volume
+    description: OpenStack Block Storage
+
 - name: Create a service for cinderv2
   os_keystone_service:
     cloud: lowcost
@@ -47,6 +55,15 @@
     name: cinderv3
     service_type: volumev3
     description: OpenStack Block Storage
+
+- name: Create volume public service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volume public http://{{ nodes.controller.name }}:8776/v1/%(project_id)s
+
+- name: Create volume internal service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volume internal http://{{ nodes.controller.name }}:8776/v1/%(project_id)s
+
+- name: Create volume admin service API endpoint with keystone_service
+  command: openstack --os-cloud=lowcost endpoint create --region {{region}} volume admin http://{{ nodes.controller.name }}:8776/v1/%(project_id)s
 
 - name: Create volumev2 public service API endpoint with keystone_service
   command: openstack --os-cloud=lowcost endpoint create --region {{region}} volumev2 public http://{{ nodes.controller.name }}:8776/v2/%(project_id)s
@@ -101,11 +118,11 @@
     name: cinder-volume
     state: latest
 
-- name: Create the LVM physical volume
-  command: 'pvcreate /dev/{{block_storage_device}}'
+#- name: Create the LVM physical volume
+#  command: 'pvcreate /dev/{{block_storage_device}}'
 
-- name: Create the LVM volume group cinder-volumes
-  command: 'vgcreate cinder-volumes /dev/{{block_storage_device}}'
+#- name: Create the LVM volume group cinder-volumes
+#  command: 'vgcreate cinder-volumes /dev/{{block_storage_device}}'
 
 - name: Setup lvm.conf on block storage
   template: >

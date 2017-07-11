@@ -63,7 +63,14 @@ dns_name_servers:
   - 150.214.156.2
 subnet_range: 10.0.0.0/24
 
-block_storage_device: vdb
+block_storage_device: sdc
+
++block_storage_device: sdc
+
+lvm_volume_type_name: "LVM"
+lvm_backend_name: "LVM_iSCSI"
+nas_volume_type_name: "NAS"
+nas_backend_name: "VOL_NAS"
 
 nodes:
   controller:

@@ -2,3 +2,4 @@
   become: true
   roles:
     - cinder
+    - cinder_volume_type

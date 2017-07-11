@@ -1,0 +1,12 @@
+- name: Create volume type for LVM
+  command: openstack --os-cloud=lowcost volume type create --public {{ lvm_volume_type_name }}
+
+- name: Create volume type for NAS
+  command: openstack --os-cloud=lowcost volume type create --public {{ nas_volume_type_name }}
+
+- name: Connect LVM volume type to its backend
+  command: openstack --os-cloud=lowcost volume type set --property volume_backend_name={{ lvm_backend_name }} {{ lvm_volume_type_name }}
+
+- name: Connect NAS volume type to its backend
+  command: openstack --os-cloud=lowcost volume type set --property volume_backend_name={{ nas_backend_name }} {{ nas_volume_type_name }}
+
