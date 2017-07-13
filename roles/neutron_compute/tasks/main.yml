@@ -6,8 +6,14 @@
 
 - name: Install neutron on compute (Be patient)
   apt:
-    name: neutron-openvswitch-agent
-    state: latest
+    name={{ item }} 
+    state=latest
+  with_items:
+    - neutron-openvswitch-agent
+#    - neutron-dhcp-agent
+#    - neutron-metadata-agent
+#    - openvswitch-common
+    - neutron-plugin-ml2
 
 - name: Setup neutron.conf on compute
   template: >
@@ -17,7 +23,15 @@
     group=root
     mode=0644
 
-- name: Setup linuxbridge_agent.ini on compute
+- name: Setup ml2_conf.ini on compute
+  template: >
+    src=etc/neutron/plugins/ml2/ml2_conf.ini
+    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
+    owner=root
+    group=root
+    mode=0644
+
+- name: Setup openvswitch_agent.ini on compute
   template: >
     src=etc/neutron/plugins/ml2/openvswitch_agent.ini
     dest=/etc/neutron/plugins/ml2/openvswitch_agent.ini
@@ -25,5 +39,11 @@
     group=root
     mode=0644
   notify:
-    - restart nova-compute
     - restart neutron-openvswitch-agent
+
+- name: Add the br-int bridge
+  command: ovs-vsctl add-br br-int
+
+#- name: Add port to external bridge
+#  command: ovs-vsctl add-port br-ex {{ tunnel_interface }}
+

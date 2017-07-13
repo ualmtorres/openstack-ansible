@@ -17,6 +17,38 @@
     - "::1"
     - "%"
 
+- name: Create neutron user
+  os_user:
+    cloud=lowcost
+    state=present
+    name=neutron
+    password={{neutron_dbpass}}
+    domain=default
+
+- name: Grant the admin role on the user neutron in the project service
+  os_user_role:
+    cloud: lowcost
+    user: neutron
+    role: admin
+    project: service
+
+- name: Create a service for neutron
+  os_keystone_service:
+    cloud: lowcost
+    state: present
+    name: neutron
+    service_type: network
+    description: OpenStack Networking
+
+- name: Create network public service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} network public http://{{nodes.controller.name}}:9696
+
+- name: Create network internal service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} network internal http://{{nodes.controller.name}}:9696
+
+- name: Create network admin service API endpoint with keystone_service
+  shell: openstack --os-cloud=lowcost endpoint create --region {{region}} network admin http://{{nodes.controller.name}}:9696
+
 - name: Install neutron (Be patient)
   apt:
     name={{ item }}

@@ -28,6 +28,14 @@
     group=root
     mode=0644
 
+- name: Setup ml2_conf.ini on network
+  template: >
+    src=etc/neutron/plugins/ml2/ml2_conf.ini
+    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
+    owner=root
+    group=root
+    mode=0644
+
 - name: Setup l3_agent.ini on network
   template: >
     src=etc/neutron/l3_agent.ini
@@ -65,21 +73,23 @@
     mode=0644
   notify:
     - restart neutron-metadata-agent
-    - restart restart neutron-openvswitch-agent
+
+- name: Setup openvswitch.ini on network
+  template: >
+    src=etc/neutron/plugins/ml2/openvswitch_agent.ini
+    dest=/etc/neutron/plugins/ml2/openvswitch_agent.ini
+    owner=root
+    group=root
+    mode=0644
+  notify:
+    - restart neutron-openvswitch-agent
     
 - name: Restart openvswitch-switch service
   service: name=openvswitch-switch state=restarted
 
-- name: Install the Python ovs-vsctl module
-  pip: name=ovs-vsctl
+#- name: Add the external bridge
+#  command: ovs-vsctl add-br br-ex
 
-- name: Add the external bridge
-  openvswitch_bridge:
-    bridge: br-ex
-    state: present
+#- name: Add port to external bridge
+#  command: ovs-vsctl add-port br-ex {{ tunnel_interface }}
 
-- name: Add port to external bridge
-  openvswitch_port:
-    bridge: br-ex
-    port: {{ provider_interface }}
-    state: present
