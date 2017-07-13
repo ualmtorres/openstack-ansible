@@ -12,7 +12,8 @@
     name={{ item }}
     state=latest
   with_items:
-    - neutron-linuxbridge-agent
+#    - neutron-linuxbridge-agent
+    - neutron-openvswitch-agent
     - neutron-l3-agent
     - neutron-dhcp-agent
     - neutron-metadata-agent
@@ -26,16 +27,6 @@
     owner=root
     group=root
     mode=0644
-
-- name: Setup linuxbridge_agent.ini on network
-  template: >
-    src=etc/neutron/plugins/ml2/linuxbridge_agent.ini
-    dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
-    owner=root
-    group=root
-    mode=0644
-  notify:
-    - restart neutron-linuxbridge-agent
 
 - name: Setup l3_agent.ini on network
   template: >
@@ -74,3 +65,21 @@
     mode=0644
   notify:
     - restart neutron-metadata-agent
+    - restart restart neutron-openvswitch-agent
+    
+- name: Restart openvswitch-switch service
+  service: name=openvswitch-switch state=restarted
+
+- name: Install the Python ovs-vsctl module
+  pip: name=ovs-vsctl
+
+- name: Add the external bridge
+  openvswitch_bridge:
+    bridge: br-ex
+    state: present
+
+- name: Add port to external bridge
+  openvswitch_port:
+    bridge: br-ex
+    port: {{ provider_interface }}
+    state: present
