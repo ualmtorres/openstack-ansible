@@ -20,6 +20,10 @@
       command: rm /etc/neutron/plugins/ml2/openvswitch_agent.ini
       ignore_errors: yes
 
+    - name: Delete /etc/neutron/plugins/ml2/ml2_agent.ini
+      command: rm /etc/neutron/plugins/ml2/ml2_agent.ini
+      ignore_errors: yes
+
     - name: Delete /etc/neutron/metadata_agent.ini
       command: rm /etc/neutron/metadata_agent.ini
       ignore_errors: yes

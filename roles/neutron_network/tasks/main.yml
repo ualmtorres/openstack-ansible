@@ -28,13 +28,13 @@
     group=root
     mode=0644
 
-- name: Setup ml2_conf.ini on network
-  template: >
-    src=etc/neutron/plugins/ml2/ml2_conf.ini
-    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
-    owner=root
-    group=root
-    mode=0644
+#- name: Setup ml2_conf.ini on network
+#  template: >
+#    src=etc/neutron/plugins/ml2/ml2_conf.ini
+#    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
+#    owner=root
+#    group=root
+#    mode=0644
 
 - name: Setup l3_agent.ini on network
   template: >

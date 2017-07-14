@@ -41,8 +41,8 @@
   notify:
     - restart neutron-openvswitch-agent
 
-- name: Add the br-int bridge
-  command: ovs-vsctl add-br br-int
+#- name: Add the br-int bridge
+#  command: ovs-vsctl add-br br-int
 
 #- name: Add port to external bridge
 #  command: ovs-vsctl add-port br-ex {{ tunnel_interface }}
