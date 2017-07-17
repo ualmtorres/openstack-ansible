@@ -1,0 +1,5 @@
+- hosts: compute
+  become: true
+  roles:
+    - move_instances
+

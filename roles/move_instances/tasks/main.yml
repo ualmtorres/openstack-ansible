@@ -1,0 +1,39 @@
+- name: Create .ssh directory for nova user
+  become_user: nova
+  file:
+    dest: /var/lib/nova/.ssh
+    state: directory
+    mode: 0700
+
+- name: Setup nova private key
+  template: 
+    src: var/lib/nova/.ssh/nova
+    dest: /var/lib/nova/.ssh/nova
+    owner: nova
+    group: nova
+    mode: 0600
+
+- name: Setup nova public key 
+  template: 
+    src: var/lib/nova/.ssh/nova.pub
+    dest: /var/lib/nova/.ssh/nova.pub
+    owner: nova
+    group: nova
+    mode: 0644
+
+- name: Setup authorized_keys 
+  template:
+    src: var/lib/nova/.ssh/authorized_keys
+    dest: /var/lib/nova/.ssh/authorized_keys
+    owner: nova
+    group: nova
+    mode: 0600
+
+- name: Setup config file 
+  template: 
+    src: var/lib/nova/.ssh/config
+    dest: /var/lib/nova/.ssh/config
+    owner: nova
+    group: nova
+    mode: 0664
+
