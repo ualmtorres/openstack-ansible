@@ -12,3 +12,19 @@
     state: present
     is_public: true
     filename: /tmp/cirros-0.3.5-x86_64-disk.img
+
+- name: Download Ubuntu 16.04 LTS image
+  get_url:
+    url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+    dest: /tmp/xenial-server-cloudimg-amd64-disk1.img
+
+- name: Upload the Ubuntu 16.04 LTSS image
+  os_image:
+    cloud: lowcost
+    name: Ubuntu 16.04 LTS
+    container_format: bare
+    disk_format: qcow2
+    state: present
+    is_public: true
+    filename: /tmp/xenial-server-cloudimg-amd64-disk1.img
+
