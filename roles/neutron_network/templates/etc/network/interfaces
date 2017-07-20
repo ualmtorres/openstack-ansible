@@ -1,0 +1,42 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The management network interface
+auto {{management_interface}}
+iface {{management_interface}} inet static
+  address {{ nodes_by_name.network.management_ip }}
+  netmask 255.255.255.0
+  network {{management_network}}
+  gateway {{ management_gateway }}
+  dns-nameservers {{ dns }}
+  mtu {{ MTU }}
+
+# The tunnel network interface
+auto {{tunnel_interface}}
+iface {{tunnel_interface}} inet static
+  address {{ nodes_by_name.network.tunnel_ip }}
+  netmask 255.255.255.0
+  network {{tunnel_network}}
+  gateway {{ tunnel_gateway }}
+  dns-nameservers {{ dns }}
+  mtu {{ MTU }}
+
+auto br-ex
+allow-ovs br-ex
+iface br-ex inet static
+  address {{ nodes_by_name.network.provider_ip }}
+  netmask 255.255.255.0
+  gateway {{ provider_gateway }}
+  ovs_type OVSBridge
+  ovs_ports {{ provider_interface }}
+
+allow-br-ex {{ provider_interface }}
+iface {{ provider_interface }} inet manual
+   ovs_bridge br-ex
+  ovs_type OVSPort
+  up ip link set $IFACE promisc on
+  down ip link set $IFACE promisc off

@@ -22,6 +22,7 @@ management_broadcast: 10.0.0.255
 provider_network: 192.168.64.0
 provider_gateway: 192.168.64.1
 tunnel_network: 10.0.1.0
+tunnel_gateway: 10.0.1.2
 dns: 150.214.156.2 8.8.8.8
 
 # NTP server

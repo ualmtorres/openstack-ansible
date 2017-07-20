@@ -16,7 +16,6 @@
     network_name={{network_name}}
     allocation_pool_start={{allocation_pool_start}}
     allocation_pool_end={{allocation_pool_end}}
-    enable_dhcp=False
     dns_nameservers={{dns_name_servers}}
     gateway_ip={{provider_gateway}}
     cidr={{subnet_range}}

@@ -12,12 +12,10 @@
     name={{ item }}
     state=latest
   with_items:
-#    - neutron-linuxbridge-agent
     - neutron-openvswitch-agent
     - neutron-l3-agent
     - neutron-dhcp-agent
     - neutron-metadata-agent
-    - neutron-plugin-ml2
 
 
 - name: Setup neutron.conf on network
@@ -27,14 +25,6 @@
     owner=root
     group=root
     mode=0644
-
-#- name: Setup ml2_conf.ini on network
-#  template: >
-#    src=etc/neutron/plugins/ml2/ml2_conf.ini
-#    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
-#    owner=root
-#    group=root
-#    mode=0644
 
 - name: Setup l3_agent.ini on network
   template: >
@@ -87,9 +77,28 @@
 - name: Restart openvswitch-switch service
   service: name=openvswitch-switch state=restarted
 
-#- name: Add the external bridge
-#  command: ovs-vsctl add-br br-ex
+- name: Add the external bridge
+  command: ovs-vsctl add-br br-ex
 
-#- name: Add port to external bridge
-#  command: ovs-vsctl add-port br-ex {{ tunnel_interface }}
+- name: Add port to external bridge
+  command: ovs-vsctl add-port br-ex {{ provider_interface }}
+
+- name: Add the internal bridge
+  command: ovs-vsctl add-br br-int
+
+- name: ensure br-ex_setup.sh script is copied to the network-node
+  template: >-
+    src=root/br-ex_setup.sh
+    dest=/root/br-ex_setup.sh
+    owner=root
+    group=root
+    mode=750
+
+- name: ensure br-ex is configured and external interface added permanently
+  template: >-
+    src=etc/network/interfaces
+    dest=/etc/network/interfaces
+    owner=root
+    group=root
+    mode=0644
 

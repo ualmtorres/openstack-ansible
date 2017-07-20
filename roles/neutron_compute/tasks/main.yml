@@ -13,7 +13,7 @@
 #    - neutron-dhcp-agent
 #    - neutron-metadata-agent
 #    - openvswitch-common
-    - neutron-plugin-ml2
+#    - neutron-plugin-ml2
 
 - name: Setup neutron.conf on compute
   template: >
@@ -23,13 +23,13 @@
     group=root
     mode=0644
 
-- name: Setup ml2_conf.ini on compute
-  template: >
-    src=etc/neutron/plugins/ml2/ml2_conf.ini
-    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
-    owner=root
-    group=root
-    mode=0644
+#- name: Setup ml2_conf.ini on compute
+#  template: >
+#    src=etc/neutron/plugins/ml2/ml2_conf.ini
+#    dest=/etc/neutron/plugins/ml2/ml2_conf.ini
+#    owner=root
+#    group=root
+#    mode=0644
 
 - name: Setup openvswitch_agent.ini on compute
   template: >
@@ -41,9 +41,9 @@
   notify:
     - restart neutron-openvswitch-agent
 
-#- name: Add the br-int bridge
-#  command: ovs-vsctl add-br br-int
+- name: Add the br-int bridge on compute nodes
+  command: ovs-vsctl add-br br-int
 
-#- name: Add port to external bridge
-#  command: ovs-vsctl add-port br-ex {{ tunnel_interface }}
+#- name: Add port to internal bridge on compute nodes
+#  command: ovs-vsctl add-port br-int {{ tunnel_interface }}
 
