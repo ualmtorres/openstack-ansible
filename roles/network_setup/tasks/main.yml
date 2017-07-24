@@ -3,9 +3,8 @@
     cloud=lowcost
     state=present
     name={{network_name}}
-    shared=True
     external=True
-    provider_physical_network=external
+    provider_physical_network=provider
     provider_network_type=flat
 
 - name: Create a subnet on the network
