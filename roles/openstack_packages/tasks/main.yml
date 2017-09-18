@@ -12,7 +12,7 @@
   apt_repository:
     #repo: cloud-archive:ocata
     #De dónde han sacado iesgn lo siguiente?
-    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu xenial-updates/ocata main"
+    repo: "deb http://ubuntu-cloud.archive.canonical.com/ubuntu xenial-updates/pike main"
     state: present
     update_cache: yes
 
