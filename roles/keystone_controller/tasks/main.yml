@@ -19,8 +19,12 @@
 
 - name: Install keystone packages (Be patient)
   apt:
-    name: keystone
-    state: latest
+    name={{ item }}
+    state=latest
+  with_items:
+    - keystone
+    - apache2 
+    - libapache2-mod-wsgi
 
 - name: Setup keystone.conf on controller
   template: >
