@@ -12,7 +12,7 @@ nas_volume: "Volume1"
 
 # Interface names
 management_interface: "eth0"
-provider_interface: "rename4"
+provider_interface: "eth2"
 tunnel_interface: "eth1"
 
 # Management network
@@ -56,6 +56,8 @@ region: "RegionOne"
 
 metadata_secret: "asdasd"
 
+glance_image_dir: "/var/lib/glance/images/"
+
 network_name: "lowcost-net"
 subnet_name: "lowcost-subnet"
 allocation_pool_start: 10.0.0.201
@@ -65,8 +67,6 @@ dns_name_servers:
 subnet_range: 10.0.0.0/24
 
 block_storage_device: sdc
-
-+block_storage_device: sdc
 
 lvm_volume_type_name: "LVM"
 lvm_backend_name: "LVM_iSCSI"
@@ -95,5 +95,7 @@ nodes_by_name:
     block: {name: block, type: block, management_ip: 10.0.0.13, tunnel_ip: 10.0.1.13}
     object01: {name: object01, type: object, management_ip: 10.0.0.55, tunnel_ip: 10.0.1.55}
     object02: {name: object02, type: object, management_ip: 10.0.0.56, tunnel_ip: 10.0.1.56}
+
+compute_nodes_quantity: 2
 
 MTU: 1500
