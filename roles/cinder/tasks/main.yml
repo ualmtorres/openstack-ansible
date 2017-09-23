@@ -118,11 +118,11 @@
     name: cinder-volume
     state: latest
 
-#- name: Create the LVM physical volume
-#  command: 'pvcreate /dev/{{block_storage_device}}'
+- name: Create the LVM physical volume
+  command: 'pvcreate /dev/{{block_storage_device}}'
 
-#- name: Create the LVM volume group cinder-volumes
-#  command: 'vgcreate cinder-volumes /dev/{{block_storage_device}}'
+- name: Create the LVM volume group cinder-volumes
+  command: 'vgcreate cinder-volumes /dev/{{block_storage_device}}'
 
 - name: Setup lvm.conf on block storage
   template: >
